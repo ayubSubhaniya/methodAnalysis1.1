@@ -28,11 +28,11 @@ public class ExploreSource implements DataSendable,ClassFileProcessable {
         return false;
     }
 
-    public boolean processClassFile(String jarName, JarEntry jarEntry) {
+    public boolean processClassFileToJSON(String jarName, JarEntry jarEntry) {
         return false;
     }
 
-    public boolean processClassFile(String className, String classPath) {
+    public boolean processClassFileToJSON(String classPath) {
         return false;
     }
 }
