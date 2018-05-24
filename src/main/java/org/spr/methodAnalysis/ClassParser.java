@@ -22,9 +22,14 @@ public class ClassParser {
     private final Printer printer = new Textifier();
     private final TraceMethodVisitor traceMethodVisitor = new TraceMethodVisitor(printer);
 
-    public Map<String, List<String>> getMethodEntriesWithInvokedMethods(InputStream classInputStream) throws IOException {
+    /**
+     * Method parses the file in InputStream
+     * @param inputStream InputStream of the file to be parsed
+     * @return Map<String, List<String>> Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
+     */
+    public Map<String, List<String>> getMethodEntriesWithInvokedMethods(InputStream inputStream) throws IOException {
         ClassReader reader;
-        reader = new ClassReader(classInputStream);
+        reader = new ClassReader(inputStream);
         ClassNode classNode = new ClassNode();
         reader.accept(classNode, 0);
         final List<MethodNode> methods = classNode.methods;
@@ -36,6 +41,11 @@ public class ClassParser {
         return methodEntriesWithInvokedMethods;
     }
 
+    /**
+     * Method retrieves invokedMethods in the given Method
+     * @param methodNode MethodNode to be parsed
+     * @return List<string> of the invokedMethods
+     */
     private List<String> getInvokedMethods(MethodNode methodNode) {
         List<String> invokedMethods = new ArrayList<String>();
         InsnList instructionList = methodNode.instructions;
@@ -54,6 +64,11 @@ public class ClassParser {
         return invokedMethods;
     }
 
+    /**
+     * Method converts the bytecode instruction to String
+     * @param instructionNode AbstractInsnNode of the instruction to be converted to String
+     * @return  Instruction in String format
+     */
     private String instructionToString(AbstractInsnNode instructionNode) {
         instructionNode.accept(traceMethodVisitor);
         StringWriter sw = new StringWriter();

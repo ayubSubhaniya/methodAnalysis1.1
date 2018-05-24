@@ -32,7 +32,10 @@ public class AnalyseMethod {
         try {
             SourceExplorer sourceExplorer = new SourceExplorer(sourcePath,elasticSearchService);
             boolean success = sourceExplorer.startExploring();
-            LOGGER.info("Source explored and added to database");
+            if (success)
+                LOGGER.info("Source explored and added to database");
+            else
+                LOGGER.info("Error in exploring source");
         } catch (Exception e) {
             LOGGER.error(e);
         }finally {

@@ -17,6 +17,11 @@ public class ClassParserAdapter {
         classParser = new ClassParser();
     }
 
+    /**
+     * Method gets data from ClassParser and parses it to JSONObject
+     * @param classInputStream InputStream of the file to be parsed
+     * @return  ArrayList<JSONObject> parsed data converted in JSON format
+     */
     public ArrayList<JSONObject> getParsedMethodsInJSON(InputStream classInputStream) throws IOException {
         Map<String, List<String>> parsedMethods = classParser.getMethodEntriesWithInvokedMethods(classInputStream);
         ArrayList<JSONObject> parsedMethodsInJSON = new ArrayList<JSONObject>();

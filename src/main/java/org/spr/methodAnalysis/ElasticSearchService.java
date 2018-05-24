@@ -15,12 +15,12 @@ import org.elasticsearch.rest.RestStatus;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 import org.apache.log4j.Logger;
 
 public class ElasticSearchService implements DBInteractable {
+    private static final int MAX_BUFFER_SIZE = (int)1e5;
     private static final Logger LOGGER = Logger.getLogger(ElasticSearchService.class.getName());
     private RestHighLevelClient client;
     private String hostname = "localhost";
@@ -28,6 +28,7 @@ public class ElasticSearchService implements DBInteractable {
     private String scheme = "http";
     private String indexname;
     private String type;
+    private Queue<IndexRequest> buffer;
 
     /**
      * This will connect to local elastic search database with
@@ -37,6 +38,7 @@ public class ElasticSearchService implements DBInteractable {
     public ElasticSearchService() {
         client = new RestHighLevelClient(RestClient.builder(
                 new HttpHost(hostname, port, scheme)));
+        buffer = new LinkedList<IndexRequest>();
         LOGGER.info("ElasticSearch Database connected");
     }
 
@@ -52,6 +54,7 @@ public class ElasticSearchService implements DBInteractable {
         this.scheme = scheme;
         client = new RestHighLevelClient(RestClient.builder(
                 new HttpHost(hostname, port, scheme)));
+        buffer = new LinkedList<IndexRequest>();
         LOGGER.info("ElasticSearch Database connected");
     }
 
@@ -146,17 +149,15 @@ public class ElasticSearchService implements DBInteractable {
                 content.field(field, jsonObject.get(field));
             }
 
-            IndexResponse response = client.index(new IndexRequest(indexname, type)
+            buffer.add(new IndexRequest(indexname, type)
                     .source(content));
-            if (response.status() == RestStatus.ACCEPTED) {
-                return true;
-            } else{
-                LOGGER.info(response.status());
-            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(),e);
         }
-        return false;
+
+        if (buffer.size()>=MAX_BUFFER_SIZE)
+            return sendDataFromBuffer();
+        return true;
     }
 
     /**
@@ -166,8 +167,6 @@ public class ElasticSearchService implements DBInteractable {
     public boolean addData(List<JSONObject> jsonObjects){
 
         try{
-            BulkRequest bulkRequest = new BulkRequest();
-
             for (JSONObject obj : jsonObjects) {
                 XContentBuilder content = new XContentFactory().jsonBuilder()
                         .startObject();
@@ -179,9 +178,28 @@ public class ElasticSearchService implements DBInteractable {
                 }
                 content.endObject();
 
-                bulkRequest.add(new IndexRequest(indexname, type)
+                buffer.add(new IndexRequest(indexname, type)
                         .source(content));
             }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(),e);
+        }
+
+        if (buffer.size()>=MAX_BUFFER_SIZE)
+            return sendDataFromBuffer();
+        return true;
+    }
+
+    /**
+     * Sends all data from buffer in a bulk request
+     * @return true if data was send properly
+     */
+    private boolean sendDataFromBuffer(){
+        try{
+            BulkRequest bulkRequest = new BulkRequest();
+
+            while (!buffer.isEmpty())
+                bulkRequest.add(buffer.remove());
             BulkResponse response = client.bulk(bulkRequest);
             if (response.status() == RestStatus.OK) {
                 return true;
@@ -215,6 +233,9 @@ public class ElasticSearchService implements DBInteractable {
      * Close current connection with Elastic Search database
      */
     public void closeConnection(){
+        if (!buffer.isEmpty()){
+            sendDataFromBuffer();
+        }
         try {
             client.close();
             LOGGER.info("Database Connection Closed");
