@@ -1,11 +1,14 @@
 package org.spr.methodAnalysis;
 
 import org.apache.log4j.Logger;
+
 import java.io.IOException;
 
 public class AnalyseMethod {
     private static final Logger LOGGER = Logger.getLogger(AnalyseMethod.class.getName());
+
     public static void main(String[] args) throws IOException {
+
         if (args.length < 1) {
             IOException exception = new IOException("No Arguments Provided");
             LOGGER.error(exception);
@@ -23,14 +26,16 @@ public class AnalyseMethod {
         } else if (args.length >= 3) {
             elasticSearchService = new ElasticSearchService();
             elasticSearchService.createIndex(args[1], args[2]);
-        } else{
+        } else {
             IOException exception = new IOException("Index Name and Document Type not provided");
             LOGGER.error(exception);
             throw exception;
         }
+
         String sourcePath = args[0];
+
         try {
-            SourceExplorer sourceExplorer = new SourceExplorer(sourcePath,elasticSearchService);
+            SourceExplorer sourceExplorer = new SourceExplorer(sourcePath, elasticSearchService);
             boolean success = sourceExplorer.startExploring();
             if (success)
                 LOGGER.info("Source explored and added to database");
@@ -38,8 +43,9 @@ public class AnalyseMethod {
                 LOGGER.info("Error in exploring source");
         } catch (Exception e) {
             LOGGER.error(e);
-        }finally {
+        } finally {
             elasticSearchService.closeConnection();
         }
+
     }
 }

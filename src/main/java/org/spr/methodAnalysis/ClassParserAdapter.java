@@ -19,25 +19,33 @@ public class ClassParserAdapter {
 
     /**
      * Method gets data from ClassParser and parses it to JSONObject
+     *
      * @param classInputStream InputStream of the file to be parsed
-     * @return  ArrayList<JSONObject> parsed data converted in JSON format
+     * @return ArrayList<JSONObject> parsed data converted in JSON format
      */
     public ArrayList<JSONObject> getParsedMethodsInJSON(InputStream classInputStream) throws IOException {
         Map<String, List<String>> parsedMethods = classParser.getMethodEntriesWithInvokedMethods(classInputStream);
         ArrayList<JSONObject> parsedMethodsInJSON = new ArrayList<JSONObject>();
+
         Iterator<Map.Entry<String, List<String>>> iterator = parsedMethods.entrySet().iterator();
+
         while (iterator.hasNext()) {
-            JSONObject parsedMethodJSONObject = new JSONObject();
             Map.Entry<String, List<String>> parsedMethod = iterator.next();
             String methodName = parsedMethod.getKey();
+
+            JSONObject parsedMethodJSONObject = new JSONObject();
             parsedMethodJSONObject.put(ParsedMethodFields.METHOD_NAME, methodName);
+
             JSONArray invokedMethodsJSONArray = new JSONArray();
             List<String> invokedMethods = parsedMethod.getValue();
             for (String invokedMethod : invokedMethods)
                 invokedMethodsJSONArray.put(invokedMethod);
+
             parsedMethodJSONObject.put(ParsedMethodFields.INVOKED_METHODS, invokedMethodsJSONArray);
+
             parsedMethodsInJSON.add(parsedMethodJSONObject);
         }
+
         return parsedMethodsInJSON;
     }
 }
