@@ -1,0 +1,11 @@
+2018-05-24 12:12:40,242 +0530 [main] INFO  (ElasticSearchService.java:39) - ElasticSearch Database connected
+2018-05-24 12:15:00,148 +0530 [main] INFO  (ElasticSearchService.java:40) - ElasticSearch Database connected
+2018-05-24 12:15:49,595 +0530 [main] INFO  (ElasticSearchService.java:40) - ElasticSearch Database connected
+2018-05-24 12:15:49,825 +0530 [main] INFO  (ElasticSearchService.java:72) - Index tmethod added.
+2018-05-24 12:15:49,827 +0530 [main] INFO  (ElasticSearchService.java:223) - Database Connection Closed
+2018-05-24 12:18:56,599 +0530 [main] INFO  (ElasticSearchService.java:40) - ElasticSearch Database connected
+2018-05-24 12:18:56,819 +0530 [main] INFO  (ElasticSearchService.java:72) - Index method added.
+2018-05-24 12:18:56,821 +0530 [main] INFO  (ElasticSearchService.java:223) - Database Connection Closed
+2018-05-24 12:19:39,347 +0530 [main] INFO  (ElasticSearchService.java:40) - ElasticSearch Database connected
+2018-05-24 12:19:39,418 +0530 [main] INFO  (ElasticSearchService.java:75) - Index already exists.
+2018-05-24 12:19:42,561 +0530 [main] INFO  (ElasticSearchService.java:223) - Database Connection Closed
