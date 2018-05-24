@@ -10,6 +10,7 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.*;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
 import org.json.JSONObject;
 
@@ -20,7 +21,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public class ElasticSearchService implements DBInteractable {
-
     private static final Logger LOGGER = Logger.getLogger(ElasticSearchService.class.getName());
     private RestHighLevelClient client;
     private String hostname = "localhost";
@@ -66,6 +66,7 @@ public class ElasticSearchService implements DBInteractable {
             this.type = type;
             if (!isExistingIndex(indexname)) {
                 CreateIndexRequest request = new CreateIndexRequest(indexName);
+                request.mapping(type,getMapping(),XContentType.JSON);
                 CreateIndexResponse response = client.indices()
                         .create(request);
                 LOGGER.info("Index "+indexName+" added.");
@@ -78,6 +79,35 @@ public class ElasticSearchService implements DBInteractable {
             LOGGER.error(e.getMessage(),e);
             return false;
         }
+    }
+
+    /**
+     * Create mapping for adding method data
+     * @return JSONObject String
+     * @throws IOException
+     */
+    private String getMapping() throws IOException {
+        XContentBuilder mapping = new XContentFactory().jsonBuilder()
+                .startObject()
+                .startObject("properties")
+                .startObject(ParsedMethodFields.CLASS_NAME)
+                .field("type","text")
+                .endObject()
+                .startObject(ParsedMethodFields.METHOD_NAME)
+                .field("type","text")
+                .endObject()
+                .startObject(ParsedMethodFields.JAR_NAME)
+                .field("type","text")
+                .endObject()
+                .startObject(ParsedMethodFields.TIME_STAMP)
+                .field("type","long")
+                .endObject()
+                .startObject(ParsedMethodFields.INVOKED_METHODS)
+                .field("type","text")
+                .endObject()
+                .endObject()
+                .endObject();
+        return mapping.string();
     }
 
     /**
@@ -119,10 +149,9 @@ public class ElasticSearchService implements DBInteractable {
             IndexResponse response = client.index(new IndexRequest(indexname, type)
                     .source(content));
             if (response.status() == RestStatus.ACCEPTED) {
-                LOGGER.info(response.toString());
                 return true;
             } else{
-                LOGGER.error(response.toString());
+                LOGGER.info(response.status());
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(),e);
@@ -154,11 +183,10 @@ public class ElasticSearchService implements DBInteractable {
                         .source(content));
             }
             BulkResponse response = client.bulk(bulkRequest);
-            if (response.status() == RestStatus.ACCEPTED) {
-                LOGGER.info(response.toString());
+            if (response.status() == RestStatus.OK) {
                 return true;
             } else{
-                LOGGER.error(response.toString());
+                LOGGER.info(response.buildFailureMessage());
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(),e);
@@ -189,6 +217,7 @@ public class ElasticSearchService implements DBInteractable {
     public void closeConnection(){
         try {
             client.close();
+            LOGGER.info("Database Connection Closed");
         } catch (IOException e) {
             LOGGER.error(e.getMessage(),e);
         }
