@@ -48,4 +48,15 @@ public class ClassParserAdapter {
 
         return parsedMethodsInJSON;
     }
+
+    /**
+     * Method finds the relative path of file of which InputStream is provided
+     * @param InputStream InputStream of the file whose relative path is to be found
+     * @return String relative path of the file
+     * @throws IOException
+     */
+    public String getRelativeClassPath(InputStream InputStream) throws IOException {
+        return classParser.getRelativeClassPath(InputStream);
+    }
+
 }

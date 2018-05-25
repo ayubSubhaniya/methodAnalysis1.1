@@ -52,7 +52,6 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
                 throw exception;
             }
         }
-
         return success;
     }
 
@@ -65,7 +64,7 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
     private boolean exploreDirectory(File directory) throws Exception {
         String[] entries = directory.list();
         if (entries == null) {
-            LOGGER.error("Directory cannot be explored");
+            LOGGER.error("Directory "+directory.getName()+" cannot be explored");
             return false;
         }
 
@@ -83,7 +82,7 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
                     success = exploreDirectory(f);
             }
             if (!success) {
-                LOGGER.error("Directory cannot be explored");
+                LOGGER.error("Directory "+directory.getName()+" cannot be explored");
                 return false;
             }
         }
@@ -105,7 +104,7 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
             if (jarEntry.getName().endsWith(".class")) {
                 boolean success = processClassFileToJSON(jarFile, jarEntry);
                 if (!success) {
-                    LOGGER.error("Data cannot be processed");
+                    LOGGER.error("Error in Processing "+jarEntry.getName());
                     return false;
                 }
             }
@@ -160,6 +159,7 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
         InputStream classInputStream = new FileInputStream(classPath);
         ArrayList<JSONObject> parsedClassMethods = classParserAdapter.getParsedMethodsInJSON(classInputStream);
 
+        String relativeClassPath = classParserAdapter.getRelativeClassPath(classInputStream);
         String className = classPath.split("\\.")[0];
 
         for (JSONObject parsedMethod : parsedClassMethods) {

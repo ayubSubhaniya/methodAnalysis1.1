@@ -29,8 +29,7 @@ public class ClassParser {
      * @return Map<String   ,       List   <   String>> Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
      */
     public Map<String, List<String>> getMethodEntriesWithInvokedMethods(InputStream inputStream) throws IOException {
-        ClassReader reader;
-        reader = new ClassReader(inputStream);
+        ClassReader reader = new ClassReader(inputStream);
 
         ClassNode classNode = new ClassNode();
         reader.accept(classNode, 0);
@@ -90,4 +89,20 @@ public class ClassParser {
 
         return sw.toString();
     }
+
+    /**
+     * Method finds the relative path of file of which InputStream is provided
+     * @param classInputStream InputStream of the file whose relative path is to be found
+     * @return String relative path of the file
+     * @throws IOException
+     */
+    public String getRelativeClassPath(InputStream classInputStream) throws IOException {
+        ClassReader reader = new ClassReader(classInputStream);
+
+        ClassNode classNode = new ClassNode();
+        reader.accept(classNode, 0);
+
+        return classNode.name;
+    }
+
 }
