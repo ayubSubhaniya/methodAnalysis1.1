@@ -30,3 +30,53 @@
 2018-05-24 15:39:49,576 +0530 [main] INFO  (ElasticSearchService.java:78) - Index already exists.
 2018-05-24 15:40:07,479 +0530 [main] INFO  (AnalyseMethod.java:36) - Source explored and added to database
 2018-05-24 15:40:09,311 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-24 15:51:36,935 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-24 15:51:37,192 +0530 [main] INFO  (ElasticSearchService.java:75) - Index methods2 added.
+2018-05-24 15:51:54,290 +0530 [main] INFO  (AnalyseMethod.java:36) - Source explored and added to database
+2018-05-24 15:51:56,311 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-24 17:22:55,289 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-24 17:22:55,356 +0530 [main] INFO  (ElasticSearchService.java:78) - Index already exists.
+2018-05-24 17:23:08,421 +0530 [main] INFO  (AnalyseMethod.java:36) - Source explored and added to database
+2018-05-24 17:23:10,705 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 10:20:35,334 +0530 [main] ERROR (AnalyseMethod.java:11) - java.io.IOException: No Arguments Provided
+2018-05-25 10:21:59,343 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 10:22:25,849 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 10:22:26,099 +0530 [main] INFO  (ElasticSearchService.java:75) - Index allmethods added.
+2018-05-25 10:22:26,101 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 10:22:36,355 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 10:22:36,432 +0530 [main] INFO  (ElasticSearchService.java:78) - Index already exists.
+2018-05-25 10:22:37,333 +0530 [main] ERROR (AnalyseMethod.java:40) - java.lang.NullPointerException
+2018-05-25 10:22:37,335 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 10:23:25,985 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 10:23:26,066 +0530 [main] INFO  (ElasticSearchService.java:78) - Index already exists.
+2018-05-25 10:32:27,050 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 10:45:38,097 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 10:45:38,326 +0530 [main] INFO  (ElasticSearchService.java:75) - Index jira added.
+2018-05-25 10:45:38,336 +0530 [main] ERROR (SourceExplorer.java:48) - java.io.IOException: Provided argument must be a .class, .jar or a directory
+2018-05-25 10:45:38,336 +0530 [main] ERROR (AnalyseMethod.java:40) - java.io.IOException: Provided argument must be a .class, .jar or a directory
+2018-05-25 10:45:38,338 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 10:46:20,228 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 10:46:20,292 +0530 [main] INFO  (ElasticSearchService.java:78) - Index already exists.
+2018-05-25 10:46:20,308 +0530 [main] ERROR (SourceExplorer.java:48) - java.io.IOException: Provided argument must be a .class, .jar or a directory
+2018-05-25 10:46:20,309 +0530 [main] ERROR (AnalyseMethod.java:40) - java.io.IOException: Provided argument must be a .class, .jar or a directory
+2018-05-25 10:46:20,311 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 10:49:20,159 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 10:49:20,221 +0530 [main] INFO  (ElasticSearchService.java:78) - Index already exists.
+2018-05-25 10:49:20,347 +0530 [main] INFO  (AnalyseMethod.java:36) - Source explored and added to database
+2018-05-25 10:49:20,406 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 11:02:46,092 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 11:02:46,154 +0530 [main] INFO  (ElasticSearchService.java:78) - Index already exists.
+2018-05-25 11:03:15,402 +0530 [main] INFO  (AnalyseMethod.java:36) - Source explored and added to database
+2018-05-25 11:03:15,712 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 11:19:04,877 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 11:19:05,109 +0530 [main] INFO  (ElasticSearchService.java:75) - Index jira added.
+2018-05-25 11:19:05,686 +0530 [main] INFO  (AnalyseMethod.java:36) - Source explored and added to database
+2018-05-25 11:19:06,143 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 11:31:31,702 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 11:31:31,758 +0530 [main] INFO  (ElasticSearchService.java:78) - Index already exists.
+2018-05-25 11:31:32,506 +0530 [main] INFO  (AnalyseMethod.java:36) - Source explored and added to database
+2018-05-25 11:31:32,999 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed
+2018-05-25 11:59:29,762 +0530 [main] INFO  (ElasticSearchService.java:42) - ElasticSearch Database connected
+2018-05-25 11:59:29,989 +0530 [main] INFO  (ElasticSearchService.java:75) - Index jira added.
+2018-05-25 11:59:30,547 +0530 [main] INFO  (AnalyseMethod.java:36) - Source explored and added to database
+2018-05-25 11:59:31,016 +0530 [main] INFO  (ElasticSearchService.java:241) - Database Connection Closed

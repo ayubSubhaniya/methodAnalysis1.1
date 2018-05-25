@@ -53,3 +53,9 @@ hs_err_pid*
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
+# Files to be ignored for Maven Project
+target/
+log/
+
+# Test files ignored
+test/
