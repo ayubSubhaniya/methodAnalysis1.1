@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface ParsedMethodFields {
-    String CLASS_NAME ="className";
+    String CLASS_NAME = "className";
     String METHOD_PARAMETER = "methodParameters";
     String METHOD_NAME = "methodName";
     String JAR_NAME = "jarName";

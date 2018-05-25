@@ -37,7 +37,7 @@ public class ClassParserAdapter {
 
             JSONObject parsedMethodJSONObject = new JSONObject();
             parsedMethodJSONObject.put(ParsedMethodFields.METHOD_NAME, methodName);
-            parsedMethodJSONObject.put(ParsedMethodFields.METHOD_PARAMETERS, methodParameters);
+            parsedMethodJSONObject.put(ParsedMethodFields.METHOD_PARAMETER, methodParameters);
 
             JSONArray invokedMethodsJSONArray = new JSONArray();
             List<String> invokedMethods = parsedMethod.getValue();
@@ -54,6 +54,7 @@ public class ClassParserAdapter {
 
     /**
      * Method finds the relative path of file of which InputStream is provided
+     *
      * @param InputStream InputStream of the file whose relative path is to be found
      * @return String relative path of the file
      * @throws IOException

@@ -63,7 +63,7 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
     private boolean exploreDirectory(File directory) throws Exception {
         String[] entries = directory.list();
         if (entries == null) {
-            LOGGER.error("Directory "+directory.getName()+" cannot be explored");
+            LOGGER.error("Directory " + directory.getName() + " cannot be explored");
             return false;
         }
 
@@ -81,7 +81,7 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
                     success = exploreDirectory(f);
             }
             if (!success) {
-                LOGGER.error("Directory "+directory.getName()+" cannot be explored");
+                LOGGER.error("Directory " + directory.getName() + " cannot be explored");
                 return false;
             }
         }
@@ -103,7 +103,7 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
             if (jarEntry.getName().endsWith(".class")) {
                 boolean success = processClassFileToJSON(jarFile, jarEntry);
                 if (!success) {
-                    LOGGER.error("Error in Processing "+jarEntry.getName());
+                    LOGGER.error("Error in Processing " + jarEntry.getName());
                     return false;
                 }
             }
@@ -172,26 +172,23 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
         return sendData(parsedClassMethods);
     }
 
-    public void traceMethodCalls(String className,String methodName,String methodParameters){
-        if(className.endsWith(".class"))
+    public void traceMethodCalls(String className, String methodName, String methodParameters) {
+        if (className.endsWith(".class"))
             className = className.split("\\.")[0];
 
-        System.out.println(className+" "+methodName);
+        System.out.println(className + " " + methodName);
 
-        List<String> data = database.getAllInvokedMethods(className,methodName,methodParameters);
-        //if(data.isEmpty())return;
-        System.out.println(data.size());
+        List<String> data = database.getAllInvokedMethods(className, methodName, methodParameters);
+
         Iterator<String> iterator = data.iterator();
 
-        while(iterator.hasNext()){
-  //          System.out.println(iterator.next());
+        while (iterator.hasNext()) {
             String invokedMethod = iterator.next();
             String methodDetails[] = invokedMethod.split(" ");
             String invokedMethodClassName = methodDetails[0];
             String invokedMethodName = methodDetails[1];
             String invokedMethodParameters = methodDetails[2];
-        //    System.out.println("Query "+invokedMethodClassName+" "+invokedMethodName);
-            traceMethodCalls(invokedMethodClassName,invokedMethodName,invokedMethodParameters);
+            traceMethodCalls(invokedMethodClassName, invokedMethodName, invokedMethodParameters);
         }
 
     }

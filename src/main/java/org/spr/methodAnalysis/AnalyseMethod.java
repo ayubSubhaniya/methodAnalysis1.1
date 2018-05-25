@@ -37,7 +37,7 @@ public class AnalyseMethod {
         try {
             SourceExplorer sourceExplorer = new SourceExplorer(sourcePath, elasticSearchService);
             boolean success = sourceExplorer.startExploring();
-            sourceExplorer.traceMethodCalls("java/lang/Double","toString"," ");
+            sourceExplorer.traceMethodCalls("org/spr/methodAnalysis/recursion", "a", "()V");
             if (success)
                 LOGGER.info("Source explored and added to database");
             else

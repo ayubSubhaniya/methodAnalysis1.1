@@ -97,7 +97,7 @@ public class ElasticSearchService implements DBInteractable {
     }
 
     /**
-     * Create mapping for adding method data
+     * Create mapping for adding data
      *
      * @return JSONObject String
      * @throws IOException
@@ -211,11 +211,12 @@ public class ElasticSearchService implements DBInteractable {
 
     /**
      * Returns all invoked methods inside method of a class
+     *
      * @param className
      * @param methodName
      * @return list of invoked methods
      */
-    public List<String> getAllInvokedMethods(String className, String methodName, String methodParameters){
+    public List<String> getAllInvokedMethods(String className, String methodName, String methodParameters) {
         SearchRequest searchRequest = new SearchRequest();
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
@@ -234,30 +235,36 @@ public class ElasticSearchService implements DBInteractable {
         BoolQueryBuilder query = QueryBuilders.boolQuery();
         query.must(classNameMatchQuery);
         query.must(methodNameMatchQuery);
+
         searchSourceBuilder.fetchSource(
                 new String[]{
                         ParsedMethodFields.INVOKED_METHODS,
                 }, null);
+
         searchSourceBuilder.query(query);
         searchSourceBuilder.size(1);
         searchSourceBuilder.sort(new FieldSortBuilder(ParsedMethodFields.TIME_STAMP).order(SortOrder.DESC));
         searchRequest.source(searchSourceBuilder);
+
         try {
             SearchResponse response = client.search(searchRequest);
             SearchHit matchedResult = response.getHits().getHits()[0];
+
             JSONObject result = new JSONObject(matchedResult.getSourceAsString());
-            System.out.println(result.toString(2));
             JSONArray invokedMethods = (JSONArray) result.get(ParsedMethodFields.INVOKED_METHODS);
+
             ArrayList<String> listOfInvokedMethods = new ArrayList<String>();
             Iterator<Object> iterator = invokedMethods.iterator();
-            while (iterator.hasNext()){
+
+            while (iterator.hasNext()) {
                 listOfInvokedMethods.add((String) iterator.next());
             }
-            return  listOfInvokedMethods;
+
+            return listOfInvokedMethods;
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             return null;
-        } catch (ArrayIndexOutOfBoundsException exception){
+        } catch (ArrayIndexOutOfBoundsException exception) {
             LOGGER.error("No matches found", exception);
             return null;
         }
@@ -274,7 +281,9 @@ public class ElasticSearchService implements DBInteractable {
 
             while (!buffer.isEmpty())
                 bulkRequest.add(buffer.remove());
+
             BulkResponse response = client.bulk(bulkRequest);
+
             if (response.status() == RestStatus.OK) {
                 return true;
             } else {

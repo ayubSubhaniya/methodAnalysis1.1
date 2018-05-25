@@ -26,7 +26,7 @@ public class ClassParser {
      * Method parses the file in InputStream
      *
      * @param inputStream InputStream of the file to be parsed
-     * @return Map<String   ,       List   <   String>> Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
+     * @return Map<String       ,               List       <       String>> Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
      */
     public Map<String, List<String>> getMethodEntriesWithInvokedMethods(InputStream inputStream) throws IOException {
         ClassReader reader = new ClassReader(inputStream);
@@ -39,7 +39,7 @@ public class ClassParser {
 
         for (MethodNode methodNode : methods) {
             List<String> invokedMethods = getInvokedMethods(methodNode);
-            methodEntriesWithInvokedMethods.put(methodNode.name+" "+methodNode.desc, invokedMethods);
+            methodEntriesWithInvokedMethods.put(methodNode.name.trim() + " " + methodNode.desc.trim(), invokedMethods);
         }
 
         return methodEntriesWithInvokedMethods;
@@ -92,6 +92,7 @@ public class ClassParser {
 
     /**
      * Method finds the relative path of file of which InputStream is provided
+     *
      * @param classInputStream InputStream of the file whose relative path is to be found
      * @return String relative path of the file
      * @throws IOException
