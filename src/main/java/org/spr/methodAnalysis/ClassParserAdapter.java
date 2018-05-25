@@ -31,10 +31,13 @@ public class ClassParserAdapter {
 
         while (iterator.hasNext()) {
             Map.Entry<String, List<String>> parsedMethod = iterator.next();
-            String methodName = parsedMethod.getKey();
+            String[] methodDetails = parsedMethod.getKey().split(" ");
+            String methodName = methodDetails[0];
+            String methodParameters = methodDetails[1];
 
             JSONObject parsedMethodJSONObject = new JSONObject();
             parsedMethodJSONObject.put(ParsedMethodFields.METHOD_NAME, methodName);
+            parsedMethodJSONObject.put(ParsedMethodFields.METHOD_PARAMETERS, methodParameters);
 
             JSONArray invokedMethodsJSONArray = new JSONArray();
             List<String> invokedMethods = parsedMethod.getValue();

@@ -2,15 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="099d7f88-02f1-46b5-a48e-c526f897d7b9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/recursion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/main.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/AnalyseMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/AnalyseMethod.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParserAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParserAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/DBInteractable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/DBInteractable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ElasticSearchService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ElasticSearchService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ParsedMethodFields.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ParsedMethodFields.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/SourceExplorer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/SourceExplorer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/AnalyseMethod.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/AnalyseMethod.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/DBInteractable.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/DBInteractable.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/ElasticSearchService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/ElasticSearchService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/SourceExplorer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/SourceExplorer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/SourceExplorer.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -26,8 +30,21 @@
       <file leaf-file-name="AnalyseMethod.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/AnalyseMethod.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="41" column="16" lean-forward="true" selection-start-line="41" selection-start-column="16" selection-end-line="41" selection-end-column="16" />
+            <state relative-caret-position="287">
+              <caret line="39" column="76" selection-start-line="39" selection-start-column="76" selection-end-line="39" selection-end-column="76" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="recursion.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/recursion.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
+              <folding>
+                <element signature="e#183#184#0" expanded="true" />
+                <element signature="e#204#205#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -35,8 +52,8 @@
       <file leaf-file-name="SourceExplorer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/SourceExplorer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="161" column="91" selection-start-line="161" selection-start-column="91" selection-end-line="161" selection-end-column="91" />
+            <state relative-caret-position="158">
+              <caret line="181" selection-start-line="181" selection-end-line="181" />
             </state>
           </provider>
         </entry>
@@ -44,8 +61,8 @@
       <file leaf-file-name="ClassParserAdapter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParserAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="54" column="47" lean-forward="true" selection-start-line="54" selection-start-column="15" selection-end-line="54" selection-end-column="47" />
+            <state relative-caret-position="319">
+              <caret line="39" column="75" selection-start-line="39" selection-start-column="75" selection-end-line="39" selection-end-column="75" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -53,11 +70,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClassParser.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ParsedMethodFields.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ParsedMethodFields.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="7" column="27" lean-forward="true" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ClassParser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="31" column="26" selection-start-line="31" selection-start-column="26" selection-end-line="31" selection-end-column="26" />
+            <state relative-caret-position="378">
+              <caret line="41" column="83" selection-start-line="41" selection-start-column="83" selection-end-line="41" selection-end-column="83" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -65,11 +91,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ElasticSearchService.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ElasticSearchService.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ElasticSearchService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1350">
-              <caret line="107" column="33" lean-forward="true" selection-start-line="107" selection-start-column="33" selection-end-line="107" selection-end-column="33" />
+            <state relative-caret-position="167">
+              <caret line="230" column="51" lean-forward="true" selection-start-line="230" selection-start-column="51" selection-end-line="230" selection-end-column="51" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#9109#9117#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DBInteractable.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/DBInteractable.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="8" column="97" selection-start-line="8" selection-start-column="97" selection-end-line="8" selection-end-column="97" />
             </state>
           </provider>
         </entry>
@@ -77,8 +116,8 @@
       <file leaf-file-name="main.log" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/logs/main.log">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
+            <state relative-caret-position="-675">
+              <caret line="164" column="109" selection-start-line="164" selection-start-column="79" selection-end-line="164" selection-end-column="109" />
             </state>
           </provider>
         </entry>
@@ -104,14 +143,15 @@
         <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassFileProcessable.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ExploreSource.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParserOutputter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/DBInteractable.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/AnalyseMethod.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/recursion.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ElasticSearchService.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/SourceExplorer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParserAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/recursion.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParserAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/SourceExplorer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/AnalyseMethod.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/DBInteractable.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ParsedMethodFields.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ElasticSearchService.java" />
       </list>
     </option>
   </component>
@@ -177,6 +217,13 @@
             <path>
               <item name="MethodAnaylsis" type="b2602c69:ProjectViewProjectNode" />
               <item name="methodAnalysis1.1" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MethodAnaylsis" type="b2602c69:ProjectViewProjectNode" />
+              <item name="methodAnalysis1.1" type="462c0819:PsiDirectoryNode" />
               <item name="target" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -208,6 +255,15 @@
               <item name="org" type="462c0819:PsiDirectoryNode" />
               <item name="spr" type="462c0819:PsiDirectoryNode" />
               <item name="methodAnalysis" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MethodAnaylsis" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="MethodAnaylsis" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; 10 &gt;" type="70bed36:NamedLibraryElementNode" />
             </path>
           </expand>
           <select />
@@ -247,7 +303,7 @@
     <configuration name="AnalyseMethod" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.spr.methodAnalysis.AnalyseMethod" />
       <module name="MethodAnaylsis" />
-      <option name="PROGRAM_PARAMETERS" value="$USER_HOME$/Desktop/atlassian-oauth-examples l doc" />
+      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/recursion.class p doc" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
@@ -313,12 +369,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1527163070153</updated>
-      <workItem from="1527163071557" duration="9463000" />
+      <workItem from="1527163071557" duration="18589000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9463000" />
+    <option name="totallyTimeSpent" value="18589000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -334,12 +390,12 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32969698" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32969698" />
       <window_info anchor="bottom" id="Version Control" />
-      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.32969698" />
+      <window_info anchor="bottom" id="Terminal" weight="0.32969698" />
       <window_info id="Capture Tool" />
       <window_info id="Designer" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24964234" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24964234" />
       <window_info anchor="right" id="Database" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -437,13 +493,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/DataSendable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassFileProcessable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -452,52 +501,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ExploreSource.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/DBInteractable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="33" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
           <caret line="41" column="21" selection-start-line="41" selection-start-column="21" selection-end-line="41" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ParsedMethodFields.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/recursion.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/AnalyseMethod.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="41" column="16" lean-forward="true" selection-start-line="41" selection-start-column="16" selection-end-line="41" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ElasticSearchService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1350">
-          <caret line="107" column="33" lean-forward="true" selection-start-line="107" selection-start-column="33" selection-end-line="107" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/logs/main.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
         </state>
       </provider>
     </entry>
@@ -508,29 +515,96 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/SourceExplorer.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/DataSendable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="161" column="91" selection-start-line="161" selection-start-column="91" selection-end-line="161" selection-end-column="91" />
+        <state relative-caret-position="45">
+          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParserAdapter.java">
+    <entry file="file://$PROJECT_DIR$/target/classes/org/spr/methodAnalysis/SourceExplorer.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="54" column="47" lean-forward="true" selection-start-line="54" selection-start-column="15" selection-end-line="54" selection-end-column="47" />
+        <state relative-caret-position="86">
+          <caret line="143" column="40" selection-start-line="143" selection-start-column="40" selection-end-line="143" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#6214#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/main.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-675">
+          <caret line="164" column="109" selection-start-line="164" selection-start-column="79" selection-end-line="164" selection-end-column="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="41" column="83" selection-start-line="41" selection-start-column="83" selection-end-line="41" selection-end-column="83" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParser.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ClassParserAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="31" column="26" selection-start-line="31" selection-start-column="26" selection-end-line="31" selection-end-column="26" />
+        <state relative-caret-position="319">
+          <caret line="39" column="75" selection-start-line="39" selection-start-column="75" selection-end-line="39" selection-end-column="75" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/recursion.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
+          <folding>
+            <element signature="e#183#184#0" expanded="true" />
+            <element signature="e#204#205#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/AnalyseMethod.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="39" column="76" selection-start-line="39" selection-start-column="76" selection-end-line="39" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/SourceExplorer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="181" selection-start-line="181" selection-end-line="181" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/DBInteractable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="8" column="97" selection-start-line="8" selection-start-column="97" selection-end-line="8" selection-end-column="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ParsedMethodFields.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="7" column="27" lean-forward="true" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/spr/methodAnalysis/ElasticSearchService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="230" column="51" lean-forward="true" selection-start-line="230" selection-start-column="51" selection-end-line="230" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#9109#9117#0" expanded="true" />
           </folding>
         </state>
       </provider>

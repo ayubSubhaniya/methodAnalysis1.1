@@ -39,7 +39,7 @@ public class ClassParser {
 
         for (MethodNode methodNode : methods) {
             List<String> invokedMethods = getInvokedMethods(methodNode);
-            methodEntriesWithInvokedMethods.put(methodNode.name, invokedMethods);
+            methodEntriesWithInvokedMethods.put(methodNode.name+" "+methodNode.desc, invokedMethods);
         }
 
         return methodEntriesWithInvokedMethods;
@@ -98,7 +98,6 @@ public class ClassParser {
      */
     public String getRelativeClassPath(InputStream classInputStream) throws IOException {
         ClassReader reader = new ClassReader(classInputStream);
-
         ClassNode classNode = new ClassNode();
         reader.accept(classNode, 0);
 

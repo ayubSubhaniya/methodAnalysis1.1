@@ -37,12 +37,13 @@ public class AnalyseMethod {
         try {
             SourceExplorer sourceExplorer = new SourceExplorer(sourcePath, elasticSearchService);
             boolean success = sourceExplorer.startExploring();
+            sourceExplorer.traceMethodCalls("java/lang/Double","toString"," ");
             if (success)
                 LOGGER.info("Source explored and added to database");
             else
                 LOGGER.info("Error in exploring source");
         } catch (Exception e) {
-            LOGGER.error(e);
+            LOGGER.error(e.fillInStackTrace());
         } finally {
             elasticSearchService.closeConnection();
         }

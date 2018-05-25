@@ -6,18 +6,29 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.*;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.*;
 
 import org.apache.log4j.Logger;
+
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 
 public class ElasticSearchService implements DBInteractable {
     private static final int MAX_BUFFER_SIZE = (int) 1e5;
@@ -99,6 +110,9 @@ public class ElasticSearchService implements DBInteractable {
                 .field("type", "keyword")
                 .endObject()
                 .startObject(ParsedMethodFields.METHOD_NAME)
+                .field("type", "keyword")
+                .endObject()
+                .startObject(ParsedMethodFields.METHOD_PARAMETER)
                 .field("type", "keyword")
                 .endObject()
                 .startObject(ParsedMethodFields.JAR_NAME)
@@ -193,6 +207,60 @@ public class ElasticSearchService implements DBInteractable {
             return sendDataFromBuffer();
 
         return true;
+    }
+
+    /**
+     * Returns all invoked methods inside method of a class
+     * @param className
+     * @param methodName
+     * @return list of invoked methods
+     */
+    public List<String> getAllInvokedMethods(String className, String methodName, String methodParameters){
+        SearchRequest searchRequest = new SearchRequest();
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        QueryBuilder classNameMatchQuery = matchQuery(
+                ParsedMethodFields.CLASS_NAME, className
+        );
+
+        QueryBuilder methodNameMatchQuery = matchQuery(
+                ParsedMethodFields.METHOD_NAME, methodName
+        );
+
+        QueryBuilder methodParameterMatchQuery = matchQuery(
+                ParsedMethodFields.METHOD_PARAMETER, methodParameters
+        );
+
+        BoolQueryBuilder query = QueryBuilders.boolQuery();
+        query.must(classNameMatchQuery);
+        query.must(methodNameMatchQuery);
+        searchSourceBuilder.fetchSource(
+                new String[]{
+                        ParsedMethodFields.INVOKED_METHODS,
+                }, null);
+        searchSourceBuilder.query(query);
+        searchSourceBuilder.size(1);
+        searchSourceBuilder.sort(new FieldSortBuilder(ParsedMethodFields.TIME_STAMP).order(SortOrder.DESC));
+        searchRequest.source(searchSourceBuilder);
+        try {
+            SearchResponse response = client.search(searchRequest);
+            SearchHit matchedResult = response.getHits().getHits()[0];
+            JSONObject result = new JSONObject(matchedResult.getSourceAsString());
+            System.out.println(result.toString(2));
+            JSONArray invokedMethods = (JSONArray) result.get(ParsedMethodFields.INVOKED_METHODS);
+            ArrayList<String> listOfInvokedMethods = new ArrayList<String>();
+            Iterator<Object> iterator = invokedMethods.iterator();
+            while (iterator.hasNext()){
+                listOfInvokedMethods.add((String) iterator.next());
+            }
+            return  listOfInvokedMethods;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+            return null;
+        } catch (ArrayIndexOutOfBoundsException exception){
+            LOGGER.error("No matches found", exception);
+            return null;
+        }
     }
 
     /**

@@ -5,8 +5,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -159,11 +158,12 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
         InputStream classInputStream = new FileInputStream(classPath);
         ArrayList<JSONObject> parsedClassMethods = classParserAdapter.getParsedMethodsInJSON(classInputStream);
 
-        String relativeClassPath = classParserAdapter.getRelativeClassPath(classInputStream);
-        String className = classPath.split("\\.")[0];
+        String relativeClassPath = classParserAdapter.getRelativeClassPath(new FileInputStream(classPath));
+        //String className = relativeClassPath.split("\\.")[0];
 
+        System.out.println(relativeClassPath);
         for (JSONObject parsedMethod : parsedClassMethods) {
-            parsedMethod.put(ParsedMethodFields.CLASS_NAME, className);
+            parsedMethod.put(ParsedMethodFields.CLASS_NAME, relativeClassPath);
             parsedMethod.put(ParsedMethodFields.TIME_STAMP, System.currentTimeMillis());
         }
 
@@ -171,4 +171,29 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
 
         return sendData(parsedClassMethods);
     }
+
+    public void traceMethodCalls(String className,String methodName,String methodParameters){
+        if(className.endsWith(".class"))
+            className = className.split("\\.")[0];
+
+        System.out.println(className+" "+methodName);
+
+        List<String> data = database.getAllInvokedMethods(className,methodName,methodParameters);
+        //if(data.isEmpty())return;
+        System.out.println(data.size());
+        Iterator<String> iterator = data.iterator();
+
+        while(iterator.hasNext()){
+  //          System.out.println(iterator.next());
+            String invokedMethod = iterator.next();
+            String methodDetails[] = invokedMethod.split(" ");
+            String invokedMethodClassName = methodDetails[0];
+            String invokedMethodName = methodDetails[1];
+            String invokedMethodParameters = methodDetails[2];
+        //    System.out.println("Query "+invokedMethodClassName+" "+invokedMethodName);
+            traceMethodCalls(invokedMethodClassName,invokedMethodName,invokedMethodParameters);
+        }
+
+    }
+
 }
