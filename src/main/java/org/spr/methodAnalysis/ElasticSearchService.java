@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 
-public class ElasticSearchService implements DBInteractable {
+public class ElasticSearchService implements DBService {
     private static final int MAX_BUFFER_SIZE = (int) 1e5;
     private static final Logger LOGGER = Logger.getLogger(ElasticSearchService.class.getName());
     private RestHighLevelClient client;
@@ -38,7 +38,7 @@ public class ElasticSearchService implements DBInteractable {
     private int port = 9200;
     private String scheme = "http";
     private String indexname;
-    private String type;
+    private String documentType;
     private Queue<IndexRequest> buffer;
 
     /**
@@ -50,7 +50,7 @@ public class ElasticSearchService implements DBInteractable {
     public ElasticSearchService() {
         client = new RestHighLevelClient(RestClient.builder(
                 new HttpHost(hostname, port, scheme)));
-        buffer = new LinkedList<IndexRequest>();
+        buffer = new LinkedList<>();
         LOGGER.info("ElasticSearch Database connected");
     }
 
@@ -65,7 +65,7 @@ public class ElasticSearchService implements DBInteractable {
         this.scheme = scheme;
         client = new RestHighLevelClient(RestClient.builder(
                 new HttpHost(hostname, port, scheme)));
-        buffer = new LinkedList<IndexRequest>();
+        buffer = new LinkedList<>();
         LOGGER.info("ElasticSearch Database connected");
     }
 
@@ -73,23 +73,46 @@ public class ElasticSearchService implements DBInteractable {
      * Method creates Index for Elastic Search
      *
      * @param indexName
-     * @param type
+     * @param documentType
      */
-    public boolean createIndex(String indexName, String type) {
+    public boolean createIndex(String indexName, String documentType) {
         try {
             this.indexname = indexName;
-            this.type = type;
+            this.documentType = documentType;
             if (!isExistingIndex(indexname)) {
-                CreateIndexRequest request = new CreateIndexRequest(indexName);
-                request.mapping(type, getMapping(), XContentType.JSON);
+                CreateIndexRequest indexRequest = new CreateIndexRequest(indexName);
+                indexRequest.mapping(documentType, getMapping(), XContentType.JSON);
+
                 CreateIndexResponse response = client.indices()
-                        .create(request);
+                        .create(indexRequest);
+
                 LOGGER.info("Index " + indexName + " added.");
                 LOGGER.info(response.toString());
             } else
                 LOGGER.info("Index already exists.");
 
             return true;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+            return false;
+        }
+    }
+
+    /**
+     * Set index for elastic search
+     * @param indexName
+     * @param documentType
+     * @return
+     */
+    public boolean setIndex(String indexName, String documentType) {
+        try {
+            this.indexname = indexName;
+            this.documentType = documentType;
+            if (isExistingIndex(indexname)) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             return false;
@@ -130,44 +153,35 @@ public class ElasticSearchService implements DBInteractable {
         return mapping.string();
     }
 
+
     /**
-     * Add Data to database if it is in particular format
+     * Add single JSON object to ElasticSearch Database
      *
-     * @param data Data to be added to Database
-     * @return
-     * @throws IOException
+     * @param data Object to add to database
      */
-    public boolean addData(Object data) throws IllegalArgumentException {
-        if (data instanceof ArrayList) {
-            ArrayList<JSONObject> jsonObjects = (ArrayList<JSONObject>) data;
-            return addData(jsonObjects);
-        } else if (data instanceof JSONObject) {
-            JSONObject jsonObject = (JSONObject) data;
-            return addData(jsonObject);
+    public boolean addData(Object data) {
+        JSONObject jsonObject;
+
+        if (data instanceof JSONObject) {
+            jsonObject = (JSONObject) data;
         } else {
             IllegalArgumentException exception = new IllegalArgumentException("Type of Object not supported");
             LOGGER.error(exception);
             throw exception;
         }
-    }
 
-    /**
-     * Add single JSON object to ElasticSearch Database
-     *
-     * @param jsonObject Json Object
-     */
-    public boolean addData(JSONObject jsonObject) {
         try {
-            XContentBuilder content = new XContentFactory().jsonBuilder();
+            XContentBuilder sourceContent = new XContentFactory().jsonBuilder();
 
-            Iterator<String> iterator = jsonObject.keys();
-            while (iterator.hasNext()) {
-                String field = iterator.next();
-                content.field(field, jsonObject.get(field));
+            Iterator<String> keysIterator = jsonObject.keys();
+            while (keysIterator.hasNext()) {
+                String field = keysIterator.next();
+                sourceContent.field(field, jsonObject.get(field));
             }
 
-            buffer.add(new IndexRequest(indexname, type)
-                    .source(content));
+            buffer.add(new IndexRequest(indexname, documentType)
+                    .source(sourceContent));
+
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -181,23 +195,33 @@ public class ElasticSearchService implements DBInteractable {
     /**
      * Add multiple JSON object to ElasticSearchDatabase
      *
-     * @param jsonObjects List of JSON objects
+     * @param listOfData List of objects to add to Elastic Search Database
      */
-    public boolean addData(List<JSONObject> jsonObjects) {
+    public boolean addData(List<? extends Object> listOfData) {
         try {
-            for (JSONObject obj : jsonObjects) {
-                XContentBuilder content = new XContentFactory().jsonBuilder()
+            for (Object dataObj : listOfData) {
+
+                JSONObject jsonObject;
+                if (dataObj instanceof JSONObject) {
+                    jsonObject = (JSONObject) dataObj;
+                } else {
+                    IllegalArgumentException exception = new IllegalArgumentException("Type of Object not supported");
+                    LOGGER.error(exception);
+                    throw exception;
+                }
+
+                XContentBuilder sourceContent = new XContentFactory().jsonBuilder()
                         .startObject();
 
-                Iterator<String> it = obj.keys();
-                while (it.hasNext()) {
-                    String field = it.next();
-                    content.field(field, obj.get(field));
+                Iterator<String> keysIterator = jsonObject.keys();
+                while (keysIterator.hasNext()) {
+                    String field = keysIterator.next();
+                    sourceContent.field(field, jsonObject.get(field));
                 }
-                content.endObject();
+                sourceContent.endObject();
 
-                buffer.add(new IndexRequest(indexname, type)
-                        .source(content));
+                buffer.add(new IndexRequest(indexname, documentType)
+                        .source(sourceContent));
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -217,7 +241,8 @@ public class ElasticSearchService implements DBInteractable {
      * @return list of invoked methods
      */
     public List<String> getAllInvokedMethods(String className, String methodName, String methodParameters) {
-        SearchRequest searchRequest = new SearchRequest();
+        SearchRequest searchRequest = new SearchRequest(indexname);
+        LOGGER.info(searchRequest.toString());
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         QueryBuilder classNameMatchQuery = matchQuery(
@@ -237,38 +262,39 @@ public class ElasticSearchService implements DBInteractable {
         query.must(methodNameMatchQuery);
         query.must(methodParameterMatchQuery);
 
+        //LOGGER.info(query.toString());
+
         searchSourceBuilder.fetchSource(
                 new String[]{
                         ParsedMethodFields.INVOKED_METHODS,
                 }, null);
-
         searchSourceBuilder.query(query);
         searchSourceBuilder.size(1);
         searchSourceBuilder.sort(new FieldSortBuilder(ParsedMethodFields.TIME_STAMP).order(SortOrder.DESC));
+
         searchRequest.source(searchSourceBuilder);
 
         try {
             SearchResponse response = client.search(searchRequest);
             SearchHit matchedResult = response.getHits().getHits()[0];
 
-            JSONObject result = new JSONObject(matchedResult.getSourceAsString());
-            JSONArray invokedMethods = (JSONArray) result.get(ParsedMethodFields.INVOKED_METHODS);
+            JSONObject queryResult = new JSONObject(matchedResult.getSourceAsString());
+            JSONArray invokedMethods = (JSONArray) queryResult.get(ParsedMethodFields.INVOKED_METHODS);
 
             ArrayList<String> listOfInvokedMethods = new ArrayList<String>();
-            Iterator<Object> iterator = invokedMethods.iterator();
+            Iterator<Object> methodsIterator = invokedMethods.iterator();
 
-            while (iterator.hasNext()) {
-                listOfInvokedMethods.add((String) iterator.next());
+            while (methodsIterator.hasNext()) {
+                listOfInvokedMethods.add((String) methodsIterator.next());
             }
 
             return listOfInvokedMethods;
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
-            return null;
         } catch (ArrayIndexOutOfBoundsException exception) {
             LOGGER.error("No matches found", exception);
-            return null;
         }
+        return Collections.emptyList();
     }
 
     /**
@@ -313,7 +339,6 @@ public class ElasticSearchService implements DBInteractable {
                 return false;
             }
         }
-
         return false;
     }
 

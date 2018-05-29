@@ -31,9 +31,16 @@ public class ParserAndAnalyserMain {
         }
     }
 
+    /**
+     * Handle request for parsing all methods inside source
+     * @param args
+     * @throws IOException
+     */
     private static void handleParseMethodsRequest(String args[]) throws IOException {
         ElasticSearchService elasticSearchService;
         ClassParser classParser = new ClassParser();
+        String sourcePath;
+        boolean indexAdded;
 
         if (args.length >= 6) {
             String hostname = args[1];
@@ -41,20 +48,29 @@ public class ParserAndAnalyserMain {
             String scheme = args[3];
 
             elasticSearchService = new ElasticSearchService(hostname, port, scheme);
-            elasticSearchService.createIndex(args[4], args[5]);
+            indexAdded = elasticSearchService.createIndex(args[4], args[5]);
+
+            sourcePath = args[6];
 
         } else if (args.length >= 3) {
             elasticSearchService = new ElasticSearchService();
-            elasticSearchService.createIndex(args[1], args[2]);
+            indexAdded = elasticSearchService.createIndex(args[1], args[2]);
+
+            sourcePath = args[3];
         } else {
             IOException exception = new IOException("Index Name and Document Type not provided");
             LOGGER.error(exception);
             throw exception;
         }
 
-        String sourcePath = args[0];
-
         try {
+
+            if (!indexAdded) {
+                RuntimeException indexException = new RuntimeException("Cannot add index");
+                LOGGER.error(indexException);
+                throw indexException;
+            }
+
             SourceExplorer sourceExplorer = new SourceExplorer(sourcePath, elasticSearchService, classParser);
             boolean success = sourceExplorer.startExploring();
             if (success)
@@ -69,23 +85,31 @@ public class ParserAndAnalyserMain {
         }
     }
 
+    /**
+     * Handle request for analysing a methods
+     * @param args
+     * @throws IOException
+     */
     private static void handleAnalyseMethodRequest(String args[]) throws IOException {
         ElasticSearchService elasticSearchService;
         String className, methodName, methodParameters;
+        boolean indexExist;
 
         if (args.length >= 9) {
             String hostname = args[1];
             int port = Integer.parseInt(args[2]);
             String scheme = args[3];
             elasticSearchService = new ElasticSearchService(hostname, port, scheme);
-            elasticSearchService.createIndex(args[4],args[5]);
+            indexExist = elasticSearchService.setIndex(args[4], args[5]);
+
             className = args[6];
             methodName = args[7];
             methodParameters = args[8];
 
         } else if (args.length >= 6) {
             elasticSearchService = new ElasticSearchService();
-            elasticSearchService.createIndex(args[1],args[2]);
+            indexExist = elasticSearchService.setIndex(args[1], args[2]);
+
             className = args[3];
             methodName = args[4];
             methodParameters = args[5];
@@ -94,8 +118,20 @@ public class ParserAndAnalyserMain {
             LOGGER.error(exception);
             throw exception;
         }
-        MethodAnalyser methodAnalyser = new MethodAnalyser(elasticSearchService);
-        List<String> allMethodcalls = methodAnalyser.traceMethodCalls(className, methodName, methodParameters);
-        System.out.println(allMethodcalls);
+
+        try {
+            if (!indexExist) {
+                IllegalArgumentException indexException = new IllegalArgumentException("Index does not exist");
+                LOGGER.error(indexException);
+                throw indexException;
+            }
+
+            MethodAnalyser methodAnalyser = new MethodAnalyser(elasticSearchService);
+            List<String> allMethodcalls = methodAnalyser.traceMethodCalls(className, methodName, methodParameters);
+            for (String method : allMethodcalls)
+                System.out.println(method);
+        } finally {
+            elasticSearchService.closeConnection();
+        }
     }
 }

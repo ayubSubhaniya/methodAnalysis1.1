@@ -1,31 +1,48 @@
 package org.spr.methodAnalysis;
 
-import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class MethodAnalyser {
-    private DBInteractable database;
-    private static final Logger LOGGER = Logger.getLogger(MethodAnalyser.class.getName());
-    public MethodAnalyser(DBInteractable database) {
+    private DBService database;
+
+    public MethodAnalyser(DBService database) {
         this.database = database;
     }
 
+    /**
+     * Get sequence of all methods call at runtime.
+     * @param className
+     * @param methodName
+     * @param methodParameters
+     * @return
+     */
     public List<String> traceMethodCalls(String className, String methodName, String methodParameters) {
         return traceMethodCalls(className, methodName, methodParameters, "");
     }
 
+    /**
+     * Get sequence of all methods call at runtime with depth.
+     * @param className
+     * @param methodName
+     * @param methodParameters
+     * @param depth spacing denoting depth of call
+     * @return
+     */
     private List<String> traceMethodCalls(String className, String methodName, String methodParameters, String depth) {
         if (className.endsWith(".class"))
             className = className.split("\\.")[0];
 
         List<String> allInvokedMethods = new ArrayList<String>();
-        allInvokedMethods.add(depth + className + " " + methodName);
+        allInvokedMethods.add(depth + className + " " + methodName + " " + methodParameters);
 
-        LOGGER.info(depth + className + " " + methodName);
-
+        System.out.println(depth + className + " " + methodName + " " + methodParameters);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         List<String> data = database.getAllInvokedMethods(className, methodName, methodParameters);
 
         Iterator<String> iterator = data.iterator();

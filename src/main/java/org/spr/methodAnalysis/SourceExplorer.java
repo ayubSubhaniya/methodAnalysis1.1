@@ -9,9 +9,9 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class SourceExplorer implements DataSendable, ClassFileProcessable {
+public class SourceExplorer implements DataSender, ClassFileProcessable {
     private String sourcePath;
-    private DBInteractable database;
+    private DBService database;
     ParsedClassOutputter parsedClassOutputter;
     private static final Logger LOGGER = Logger.getLogger(SourceExplorer.class.getName());
 
@@ -19,9 +19,9 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
      * Constructor
      *
      * @param path     String path of file or directory ot be explored
-     * @param database DBInteractable Database service object
+     * @param database DBService Database service object
      */
-    public SourceExplorer(String path, DBInteractable database, ParsedClassOutputter parsedClassOutputter) {
+    public SourceExplorer(String path, DBService database, ParsedClassOutputter parsedClassOutputter) {
         this.sourcePath = path;
         this.database = database;
         this.parsedClassOutputter = parsedClassOutputter;
@@ -35,7 +35,6 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
      */
     public boolean startExploring() throws Exception {
         boolean success;
-
         if (sourcePath.endsWith(".class")) {
             success = processClassFileToJSON(sourcePath);
         } else if (sourcePath.endsWith(".jar")) {
@@ -119,6 +118,11 @@ public class SourceExplorer implements DataSendable, ClassFileProcessable {
      * @return boolean true if data was successfully sent to database service and false otherwise
      */
     public boolean sendData(Object data) throws Exception {
+        return database.addData(data);
+    }
+
+    @Override
+    public boolean sendData(List<? extends Object> data) throws Exception {
         return database.addData(data);
     }
 
