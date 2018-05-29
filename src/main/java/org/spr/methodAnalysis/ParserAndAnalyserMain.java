@@ -2,7 +2,10 @@ package org.spr.methodAnalysis;
 
 import org.apache.log4j.Logger;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 
@@ -33,6 +36,7 @@ public class ParserAndAnalyserMain {
 
     /**
      * Handle request for parsing all methods inside source
+     *
      * @param args
      * @throws IOException
      */
@@ -87,6 +91,7 @@ public class ParserAndAnalyserMain {
 
     /**
      * Handle request for analysing a methods
+     *
      * @param args
      * @throws IOException
      */
@@ -127,9 +132,19 @@ public class ParserAndAnalyserMain {
             }
 
             MethodAnalyser methodAnalyser = new MethodAnalyser(elasticSearchService);
-            List<String> allMethodcalls = methodAnalyser.traceMethodCalls(className, methodName, methodParameters);
-            for (String method : allMethodcalls)
-                System.out.println(method);
+
+            PrintWriter methodSequenceCall = new PrintWriter(new File(methodName+"_Sequence.txt"));
+            PrintWriter methodSequenceCall2 = new PrintWriter(new File(methodName+"_Sequence2.txt"));
+            List<String> sequenceOfMethodCalls = methodAnalyser.traceMethodCalls(className, methodName, methodParameters);
+            for (String method : sequenceOfMethodCalls)
+            {
+                methodSequenceCall2.println(method);
+                methodSequenceCall2.println();
+                methodSequenceCall.println(method);
+                methodSequenceCall.println();
+            }
+            methodSequenceCall.close();
+            methodSequenceCall2.close();
         } finally {
             elasticSearchService.closeConnection();
         }

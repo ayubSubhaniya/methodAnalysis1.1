@@ -44,7 +44,7 @@ public class ElasticSearchService implements DBService {
     /**
      * This will connect to local elastic search database with
      *
-     * @hostname = 9200 and
+     * @hostname = localhost and
      * @port = 9200
      */
     public ElasticSearchService() {
@@ -100,6 +100,7 @@ public class ElasticSearchService implements DBService {
 
     /**
      * Set index for elastic search
+     *
      * @param indexName
      * @param documentType
      * @return

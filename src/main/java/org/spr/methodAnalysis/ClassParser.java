@@ -25,7 +25,7 @@ public class ClassParser implements ParsedClassOutputter {
      * Method parses the file in InputStream
      *
      * @param inputStream InputStream of the file to be parsed
-     * @return Map<String   ,   List < String> > Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
+     * @return Map<String       ,       List   <   String> > Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
      */
     public Map<String, List<String>> getMethodEntriesWithInvokedMethods(InputStream inputStream) throws IOException {
         ClassReader reader = new ClassReader(inputStream);

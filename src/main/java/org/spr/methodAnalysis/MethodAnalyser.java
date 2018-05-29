@@ -13,6 +13,7 @@ public class MethodAnalyser {
 
     /**
      * Get sequence of all methods call at runtime.
+     *
      * @param className
      * @param methodName
      * @param methodParameters
@@ -24,10 +25,11 @@ public class MethodAnalyser {
 
     /**
      * Get sequence of all methods call at runtime with depth.
+     *
      * @param className
      * @param methodName
      * @param methodParameters
-     * @param depth spacing denoting depth of call
+     * @param depth            spacing denoting depth of call
      * @return
      */
     private List<String> traceMethodCalls(String className, String methodName, String methodParameters, String depth) {
@@ -35,16 +37,19 @@ public class MethodAnalyser {
             className = className.split("\\.")[0];
 
         List<String> allInvokedMethods = new ArrayList<String>();
-        allInvokedMethods.add(depth + className + " " + methodName + " " + methodParameters);
 
-        System.out.println(depth + className + " " + methodName + " " + methodParameters);
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         List<String> data = database.getAllInvokedMethods(className, methodName, methodParameters);
 
+        if (!data.isEmpty())
+        {
+//            System.out.println(depth + className + " " + methodName + " " + methodParameters);
+//            try {
+//                Thread.sleep(100);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+            allInvokedMethods.add(depth + className + " " + methodName + " " + methodParameters);
+        }
         Iterator<String> iterator = data.iterator();
 
         while (iterator.hasNext()) {
