@@ -40,6 +40,16 @@ public class MethodAnalyser {
 
         List<String> data = database.getAllInvokedMethods(className, methodName, methodParameters);
 
+        if(data == null)
+            data = getInvokedMethodsFromInhertedMethod(className,methodName,methodParameters);
+
+        if(data == null){
+            if(database.getNumberOfInterfaceImplementations(className) == 1) {
+                List<String> implementedClassNames = database.getImplementedClassesName(className);
+                data = database.getAllInvokedMethods(implementedClassNames.get(0),methodName,methodParameters);
+            }
+        }
+
         if (data!=null)
         {
             allInvokedMethods.add(depth + className + " " + methodName + " " + methodParameters);
@@ -54,6 +64,32 @@ public class MethodAnalyser {
                 allInvokedMethods.addAll(traceMethodCalls(invokedMethodClassName, invokedMethodName, invokedMethodParameters, depth + "\t"));
             }
         }
+
         return allInvokedMethods;
     }
+
+    /**
+     * Method checks if any parent class has the given method
+     *
+     * @param className String Name of class which contains the method to be found in parent class
+     * @param methodName String Name of method to be found in parent class
+     * @param methodParameters String Method parameters of the method to be found in parent class
+     * @return
+     */
+    private List<String> getInvokedMethodsFromInhertedMethod(String className, String methodName, String methodParameters){
+        String parentClassName = database.getSuperClassName(className);
+
+        List<String> allInvokedMethodsOfInheritedMethod = new ArrayList<>();
+
+        while(!parentClassName.startsWith("java")){
+            allInvokedMethodsOfInheritedMethod = database.getAllInvokedMethods(parentClassName, methodName, methodParameters);
+            if(allInvokedMethodsOfInheritedMethod!=null)
+                return allInvokedMethodsOfInheritedMethod;
+            else
+                parentClassName = database.getSuperClassName(parentClassName);
+        }
+
+        return allInvokedMethodsOfInheritedMethod;
+    }
+
 }

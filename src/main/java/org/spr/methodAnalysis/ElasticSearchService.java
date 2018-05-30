@@ -17,6 +17,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -243,7 +244,7 @@ public class ElasticSearchService implements DBService {
      */
     public List<String> getAllInvokedMethods(String className, String methodName, String methodParameters) {
         SearchRequest searchRequest = new SearchRequest(indexname);
-        LOGGER.info(searchRequest.toString());
+
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         QueryBuilder classNameMatchQuery = matchQuery(
@@ -290,6 +291,102 @@ public class ElasticSearchService implements DBService {
             }
 
             return listOfInvokedMethods;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (ArrayIndexOutOfBoundsException exception) {
+            LOGGER.error("No matches found", exception);
+        }
+        return null;
+    }
+
+    public List<String> getImplementedClassesName(String interfaceName) {
+        SearchRequest searchRequest = new SearchRequest(indexname);
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        QueryBuilder interfaceNameMatchQuery = matchQuery(
+                ParsedMethodFields.INTERFACE_NAMES, interfaceName
+        );
+
+        BoolQueryBuilder query = QueryBuilders.boolQuery();
+        query.must(interfaceNameMatchQuery);
+        //LOGGER.info(query.toString());
+
+        String aggregationName = "group_by_"+ParsedMethodFields.CLASS_NAME;
+
+        searchSourceBuilder
+                .aggregation(AggregationBuilders.terms(aggregationName)
+                        .field(ParsedMethodFields.CLASS_NAME)
+                        .size(100)
+                );
+        searchSourceBuilder.query(query);
+        searchSourceBuilder.size(0);
+
+        searchRequest.source(searchSourceBuilder);
+
+        try {
+            SearchResponse response = client.search(searchRequest);;
+            JSONObject aggregationResponse=new JSONObject(response.getAggregations().asMap());
+            JSONArray aggregationBuckets = aggregationResponse.getJSONObject(aggregationName).getJSONArray("buckets");
+
+            ArrayList<String> listOfClasses = new ArrayList<String>();
+            Iterator<Object> bucketsIterator = aggregationBuckets.iterator();
+
+            while (bucketsIterator.hasNext()) {
+
+                JSONObject bucket = new JSONObject(bucketsIterator.next().toString());
+                listOfClasses.add((String) bucket.get("key"));
+            }
+            return listOfClasses;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (ArrayIndexOutOfBoundsException exception) {
+            LOGGER.error("No matches found", exception);
+        }
+        return null;
+    }
+
+    public int getNumberOfInterfaceImplementations(String interfaceName){
+        List<String> listOfClasses = getImplementedClassesName(interfaceName);
+        if (listOfClasses!=null)
+            return listOfClasses.size();
+        else
+            return -1;
+    }
+
+    public String getSuperClassName(String className) {
+        SearchRequest searchRequest = new SearchRequest(indexname);
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        QueryBuilder classNameMatchQuery = matchQuery(
+                ParsedMethodFields.CLASS_NAME, className
+        );
+
+        BoolQueryBuilder query = QueryBuilders.boolQuery();
+        query.must(classNameMatchQuery);
+        //LOGGER.info(query.toString());
+
+        searchSourceBuilder
+                .fetchSource(new String[]{
+                        ParsedMethodFields.SUPER_CLASS_NAME,
+                }, null);
+
+        searchSourceBuilder.query(query);
+        searchSourceBuilder.size(1);
+        searchSourceBuilder.sort(new FieldSortBuilder(ParsedMethodFields.TIME_STAMP).order(SortOrder.DESC));
+
+        searchRequest.source(searchSourceBuilder);
+
+        try {
+            SearchResponse response = client.search(searchRequest);
+
+            SearchHit matchedResult = response.getHits().getHits()[0];
+
+            JSONObject queryResult = new JSONObject(matchedResult.getSourceAsString());
+            String superClassNames = (String) queryResult.get(ParsedMethodFields.SUPER_CLASS_NAME);
+
+            return superClassNames;
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (ArrayIndexOutOfBoundsException exception) {

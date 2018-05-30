@@ -1,6 +1,7 @@
 package org.spr.methodAnalysis;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -138,6 +139,14 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
         try {
             classInputStream = jarFile.getInputStream(classJarEntry);
             List<JSONObject> parsedClassMethods = parsedClassOutputter.getParsedMethodsInJSON(classInputStream);
+            classInputStream.close();
+
+            classInputStream = jarFile.getInputStream(classJarEntry);
+            String superClassName = parsedClassOutputter.getSuperClassName(classInputStream);
+            classInputStream.close();
+
+            classInputStream = jarFile.getInputStream(classJarEntry);
+            JSONArray interfacesImplemented = parsedClassOutputter.getImplementedInterfaces(classInputStream);
 
             String[] jarPath = jarFile.getName().split(File.separator);
             String jarName = jarPath[jarPath.length - 1];
@@ -145,6 +154,8 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
 
             for (JSONObject parsedMethod : parsedClassMethods) {
                 parsedMethod.put(ParsedMethodFields.CLASS_NAME, className);
+                parsedMethod.put(ParsedMethodFields.SUPER_CLASS_NAME, superClassName);
+                parsedMethod.put(ParsedMethodFields.INTERFACE_NAMES, interfacesImplemented);
                 parsedMethod.put(ParsedMethodFields.JAR_NAME, jarName);
                 parsedMethod.put(ParsedMethodFields.TIME_STAMP, System.currentTimeMillis());
             }
@@ -171,9 +182,19 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
 
             classInputStream = new FileInputStream(classPath);
             String relativeClassPath = parsedClassOutputter.getRelativeClassPath(classInputStream);
+            classInputStream.close();
+
+            classInputStream = new FileInputStream(classPath);
+            String superClassName = parsedClassOutputter.getSuperClassName(classInputStream);
+            classInputStream.close();
+
+            classInputStream = new FileInputStream(classPath);
+            JSONArray interfacesImplemented = parsedClassOutputter.getImplementedInterfaces(classInputStream);
 
             for (JSONObject parsedMethod : parsedClassMethods) {
                 parsedMethod.put(ParsedMethodFields.CLASS_NAME, relativeClassPath);
+                parsedMethod.put(ParsedMethodFields.SUPER_CLASS_NAME, superClassName);
+                parsedMethod.put(ParsedMethodFields.INTERFACE_NAMES, interfacesImplemented);
                 parsedMethod.put(ParsedMethodFields.TIME_STAMP, System.currentTimeMillis());
             }
             return sendData(parsedClassMethods);
@@ -183,5 +204,4 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
         }
 
     }
-
 }

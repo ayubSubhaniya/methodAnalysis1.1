@@ -1,8 +1,5 @@
 package org.spr.methodAnalysis;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public interface ParsedMethodFields {
     String CLASS_NAME = "className";
     String METHOD_PARAMETER = "methodParameters";
@@ -10,4 +7,8 @@ public interface ParsedMethodFields {
     String JAR_NAME = "jarName";
     String TIME_STAMP = "timeStamp";
     String INVOKED_METHODS = "invokedMethods";
+    String INTERFACE_NAMES = "interfaceNames";
+    String SUPER_CLASS_NAME = "superClassName";
 }
+
+

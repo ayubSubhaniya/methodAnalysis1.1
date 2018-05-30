@@ -40,6 +40,7 @@ public class ClassParser implements ParsedClassOutputter {
             List<String> invokedMethods = getInvokedMethods(methodNode);
             methodEntriesWithInvokedMethods.put(methodNode.name.trim() + " " + methodNode.desc.trim(), invokedMethods);
         }
+
         return methodEntriesWithInvokedMethods;
     }
 
@@ -136,6 +137,34 @@ public class ClassParser implements ParsedClassOutputter {
         reader.accept(classNode, 0);
 
         return classNode.name;
+    }
+
+    /**
+     * Method finds the super class name
+     *
+     * @param classInputStream InputStream of the class whose super class name is to be found
+     * @return  String super class name of the class whose InputStream is provided
+     * @throws IOException
+     */
+    public String getSuperClassName(InputStream classInputStream) throws IOException {
+        ClassReader reader = new ClassReader(classInputStream);
+        ClassNode classNode = new ClassNode();
+        reader.accept(classNode, 0);
+
+        return classNode.superName;
+    }
+
+    public JSONArray getImplementedInterfaces(InputStream classInputStream) throws IOException {
+        JSONArray implementedInterfaces = new JSONArray();
+
+        ClassReader reader = new ClassReader(classInputStream);
+        ClassNode classNode = new ClassNode();
+        reader.accept(classNode, 0);
+
+        for(String interfaceName : classNode.interfaces)
+            implementedInterfaces.put(interfaceName);
+
+        return implementedInterfaces;
     }
 
 }
