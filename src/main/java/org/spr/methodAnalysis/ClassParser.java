@@ -40,7 +40,6 @@ public class ClassParser implements ParsedClassOutputter {
             List<String> invokedMethods = getInvokedMethods(methodNode);
             methodEntriesWithInvokedMethods.put(methodNode.name.trim() + " " + methodNode.desc.trim(), invokedMethods);
         }
-
         return methodEntriesWithInvokedMethods;
     }
 

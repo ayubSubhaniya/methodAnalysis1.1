@@ -8,11 +8,37 @@ com/spr/rest/PublishingRestAPI schedule (Ljavax/servlet/http/HttpServletRequest;
 
 				com/spr/utils/core/UserContextProvider getCurrentPartner ()Lcom/spr/beans/Partner;
 
+					com/spr/utils/core/UserContextProvider$UserContext getPartner ()Lcom/spr/beans/Partner;
+
+				com/spr/beans/Partner getPartnerId ()Ljava/lang/Long;
+
+			com/spr/ops/partners/PartnerService getPartnerProperty (Ljava/lang/Long;Ljava/lang/String;)Ljava/lang/String;
+
+			com/spr/core/logger/Logger error (Ljava/lang/String;Ljava/lang/Throwable;)V
+
+	com/spr/core/logger/Logger isDebugEnabled ()Z
+
+	com/spr/core/logger/Logger devDebug (Ljava/lang/String;[Ljava/lang/String;)V
+
+	com/spr/validation/ValidationService validate (Ljava/lang/Object;)V
+
+	com/spr/beans/universal/publishing/Approval getComment ()Ljava/lang/String;
+
 	com/spr/rest/PublishingRestAPI scanCommentText (Ljava/lang/String;)V
+
+		com/spr/security/content/service/ContentScanService checkAndReturnUnsafeUrlsIfPropertyEnabled (Ljava/lang/String;)Ljava/util/List;
 
 		com/spr/utils/SprinklrCollectionUtils isNotEmpty (Ljava/util/Collection;)Z
 
 			com/spr/utils/SprinklrCollectionUtils isEmpty (Ljava/util/Collection;)Z
+
+		com/spr/validation/exception/InvalidRequestException <init> (Ljava/lang/String;)V
+
+		com/spr/exceptions/UserVisibleException <init> (Ljava/lang/Throwable;Ljava/lang/String;[Ljava/lang/String;)V
+
+			com/spr/exceptions/NonRecoverableException <init> (Ljava/lang/String;[Ljava/lang/String;Ljava/lang/Throwable;)V
+
+				com/spr/exceptions/NonRecoverableException createI18NMessage (Ljava/lang/String;[Ljava/lang/String;)Ljava/lang/String;
 
 					com/spr/core/i18n/MessageHelper getMessage (Lcom/spr/core/i18n/MessageHelper$MessageType;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
@@ -23,6 +49,10 @@ com/spr/rest/PublishingRestAPI schedule (Ljavax/servlet/http/HttpServletRequest;
 							com/spr/core/i18n/LocaleContextHolder getLocale ()Ljava/util/Locale;
 
 								com/spr/core/i18n/LocaleContextHolder getLocaleContext ()Lcom/spr/core/i18n/LocaleContext;
+
+								com/spr/core/i18n/LocaleContext getLanguageCode ()Ljava/lang/String;
+
+								com/spr/core/i18n/LocaleContext getLanguageCode ()Ljava/lang/String;
 
 							com/spr/core/i18n/MessageSource getMessage (Ljava/lang/String;[Ljava/lang/Object;Ljava/util/Locale;)Ljava/lang/String;
 
@@ -38,6 +68,10 @@ com/spr/rest/PublishingRestAPI schedule (Ljavax/servlet/http/HttpServletRequest;
 
 													com/spr/core/i18n/MessageSource toBundleName (Ljava/util/Locale;)Ljava/lang/String;
 
+													com/spr/core/i18n/MessageSource$SprPropertyResourceBundle <init> (Ljava/io/Reader;Ljava/util/Locale;)V
+
+													com/spr/core/i18n/MessageSource$SprPropertyResourceBundle <init> (Ljava/io/InputStream;Ljava/util/Locale;)V
+
 											com/spr/core/i18n/MessageSource getStringOrNull (Ljava/util/ResourceBundle;Ljava/lang/String;)Ljava/lang/String;
 
 										com/spr/core/i18n/MessageSource getStringOrNull (Ljava/util/ResourceBundle;Ljava/lang/String;)Ljava/lang/String;
@@ -51,6 +85,10 @@ com/spr/rest/PublishingRestAPI schedule (Ljavax/servlet/http/HttpServletRequest;
 												com/spr/core/i18n/MessageSource findResourceBundles (Ljava/util/Locale;)Ljava/util/List;
 
 													com/spr/core/i18n/MessageSource toBundleName (Ljava/util/Locale;)Ljava/lang/String;
+
+													com/spr/core/i18n/MessageSource$SprPropertyResourceBundle <init> (Ljava/io/Reader;Ljava/util/Locale;)V
+
+													com/spr/core/i18n/MessageSource$SprPropertyResourceBundle <init> (Ljava/io/InputStream;Ljava/util/Locale;)V
 
 											com/spr/core/i18n/MessageSource getStringOrNull (Ljava/util/ResourceBundle;Ljava/lang/String;)Ljava/lang/String;
 
@@ -70,6 +108,10 @@ com/spr/rest/PublishingRestAPI schedule (Ljavax/servlet/http/HttpServletRequest;
 
 													com/spr/core/i18n/MessageSource toBundleName (Ljava/util/Locale;)Ljava/lang/String;
 
+													com/spr/core/i18n/MessageSource$SprPropertyResourceBundle <init> (Ljava/io/Reader;Ljava/util/Locale;)V
+
+													com/spr/core/i18n/MessageSource$SprPropertyResourceBundle <init> (Ljava/io/InputStream;Ljava/util/Locale;)V
+
 											com/spr/core/i18n/MessageSource getStringOrNull (Ljava/util/ResourceBundle;Ljava/lang/String;)Ljava/lang/String;
 
 										com/spr/core/i18n/MessageSource getStringOrNull (Ljava/util/ResourceBundle;Ljava/lang/String;)Ljava/lang/String;
@@ -84,6 +126,10 @@ com/spr/rest/PublishingRestAPI schedule (Ljavax/servlet/http/HttpServletRequest;
 
 													com/spr/core/i18n/MessageSource toBundleName (Ljava/util/Locale;)Ljava/lang/String;
 
+													com/spr/core/i18n/MessageSource$SprPropertyResourceBundle <init> (Ljava/io/Reader;Ljava/util/Locale;)V
+
+													com/spr/core/i18n/MessageSource$SprPropertyResourceBundle <init> (Ljava/io/InputStream;Ljava/util/Locale;)V
+
 											com/spr/core/i18n/MessageSource getStringOrNull (Ljava/util/ResourceBundle;Ljava/lang/String;)Ljava/lang/String;
 
 										com/spr/core/i18n/MessageSource getMessageFormat (Ljava/util/ResourceBundle;Ljava/lang/String;Ljava/util/Locale;)Ljava/text/MessageFormat;
@@ -94,37 +140,115 @@ com/spr/rest/PublishingRestAPI schedule (Ljavax/servlet/http/HttpServletRequest;
 
 					com/spr/utils/core/UserContextProvider getCurrentUser ()Lcom/spr/beans/User;
 
+						com/spr/utils/core/UserContextProvider$UserContext getUser ()Lcom/spr/beans/User;
+
+					com/spr/beans/User getUserId ()Ljava/lang/Long;
+
 				com/spr/utils/core/UserContextProvider getCurrentClientId ()Ljava/lang/Long;
 
 					com/spr/utils/core/UserContextProvider getCurrentClient ()Lcom/spr/beans/Client;
+
+						com/spr/utils/core/UserContextProvider$UserContext getClient ()Lcom/spr/beans/Client;
+
+					com/spr/beans/Client getClientId ()Ljava/lang/Long;
 
 				com/spr/utils/core/UserContextProvider getCurrentPartnerId ()Ljava/lang/Long;
 
 					com/spr/utils/core/UserContextProvider getCurrentPartner ()Lcom/spr/beans/Partner;
 
+						com/spr/utils/core/UserContextProvider$UserContext getPartner ()Lcom/spr/beans/Partner;
+
+					com/spr/beans/Partner getPartnerId ()Ljava/lang/Long;
+
 	com/spr/ops/publishing/util/PublishingUtils addClientDetails (Lcom/spr/ops/publishing/dto/MessageDTO;Ljavax/servlet/http/HttpServletRequest;)V
+
+		com/spr/ops/publishing/dto/MessageDTO setClientIpAddress (Ljava/lang/String;)V
 
 		com/spr/ops/publishing/util/PublishingUtils addVersionHeaderInMessageDTO (Lcom/spr/ops/publishing/dto/MessageDTO;Ljava/lang/String;Ljava/lang/String;)V
 
 			com/spr/ops/publishing/util/PublishingUtils addCommonAdditionalIfMissing (Lcom/spr/ops/publishing/dto/MessageDTO;)Ljava/util/Map;
 
+				com/spr/ops/publishing/dto/MessageDTO getChannelSpecificAdditionalProperties ()Ljava/util/List;
+
 				com/spr/ops/publishing/util/PublishingUtils getAdditionalPropertiesForChannel (Ljava/lang/Long;Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/util/List;)Ljava/util/Map;
 
 					com/spr/ops/publishing/util/PublishingUtils findChannelSpecificData (Ljava/util/List;Ljava/lang/Long;Lcom/spr/enums/ChannelType;Ljava/lang/String;)Lcom/spr/beans/universal/publishing/ChannelSpecificMessageData;
 
-						com/spr/beans/universal/publishing/ChannelInfo equals (Ljava/lang/Object;)Z
+						com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/Long;)V
+
+							com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)V
+
+								com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+
+						com/spr/beans/universal/publishing/ChannelInfo setAccountType (Ljava/lang/String;)V
+
+						com/spr/beans/universal/publishing/ChannelSpecificMessageData getChannelInfo ()Lcom/spr/beans/universal/publishing/ChannelInfo;
 
 						com/spr/beans/universal/publishing/ChannelInfo equals (Ljava/lang/Object;)Z
 
-						com/spr/beans/universal/publishing/ChannelInfo equals (Ljava/lang/Object;)Z
+						com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/Long;)V
+
+							com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)V
+
+								com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+
+						com/spr/beans/universal/publishing/ChannelSpecificMessageData getChannelInfo ()Lcom/spr/beans/universal/publishing/ChannelInfo;
 
 						com/spr/beans/universal/publishing/ChannelInfo equals (Ljava/lang/Object;)Z
+
+						com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/Long;)V
+
+							com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)V
+
+								com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+
+						com/spr/beans/universal/publishing/ChannelInfo setAccountType (Ljava/lang/String;)V
+
+						com/spr/beans/universal/publishing/ChannelSpecificMessageData getChannelInfo ()Lcom/spr/beans/universal/publishing/ChannelInfo;
+
+						com/spr/beans/universal/publishing/ChannelInfo equals (Ljava/lang/Object;)Z
+
+						com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/Long;)V
+
+							com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)V
+
+								com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+
+						com/spr/beans/universal/publishing/ChannelSpecificMessageData getChannelInfo ()Lcom/spr/beans/universal/publishing/ChannelInfo;
+
+						com/spr/beans/universal/publishing/ChannelInfo equals (Ljava/lang/Object;)Z
+
+					com/spr/beans/universal/publishing/ChannelSpecificMessageData getData ()Ljava/lang/Object;
+
+				com/spr/ops/publishing/dto/MessageDTO getChannelSpecificAdditionalProperties ()Ljava/util/List;
+
+				com/spr/ops/publishing/dto/MessageDTO setChannelSpecificAdditionalProperties (Ljava/util/List;)V
 
 				com/spr/beans/universal/publishing/ChannelSpecificMessageData newChannelSpecificData (Ljava/lang/Object;Lcom/spr/enums/ChannelType;Ljava/lang/Long;)Lcom/spr/beans/universal/publishing/ChannelSpecificMessageData;
 
 					com/spr/beans/universal/publishing/ChannelSpecificMessageData newChannelSpecificData (Ljava/lang/Object;Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;)Lcom/spr/beans/universal/publishing/ChannelSpecificMessageData;
 
+						com/spr/beans/universal/publishing/ChannelSpecificMessageData <init> (Ljava/lang/Object;Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;)V
+
+							com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/Long;)V
+
+								com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)V
+
+									com/spr/beans/universal/publishing/ChannelInfo <init> (Lcom/spr/enums/ChannelType;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+
+							com/spr/beans/universal/publishing/ChannelInfo setAccountType (Ljava/lang/String;)V
+
+			com/spr/core/logger/Logger devError (Ljava/lang/String;Ljava/lang/Throwable;[Ljava/lang/String;)V
+
+		com/spr/core/logger/Logger error (Ljava/lang/String;Ljava/lang/Throwable;)V
+
+	com/spr/ops/publishing/service/OutboundMessageService createAndScheduleMessage (Lcom/spr/ops/publishing/dto/MessageDTO;)Ljava/util/Collection;
+
+	com/spr/rest/dto/publishing/PaidMessageDTO getPaidInitiativePublishDTO ()Lcom/spr/paid/domain/adcollection/PaidInitiativePublishDTO;
+
 	com/spr/rest/PublishingRestAPI saveAdConfigIfExists (Ljava/util/Collection;Lcom/spr/paid/domain/adcollection/PaidInitiativePublishDTO;)V
+
+		com/spr/paid/domain/adcollection/PaidInitiativePublishDTO getPaidInitiative ()Lcom/spr/paid/domain/adcollection/PaidInitiative;
 
 		com/spr/util/AdUtils generateId ()Ljava/lang/String;
 
@@ -132,17 +256,47 @@ com/spr/rest/PublishingRestAPI schedule (Ljavax/servlet/http/HttpServletRequest;
 
 			com/spr/utils/core/UserContextProvider getCurrentPartner ()Lcom/spr/beans/Partner;
 
+				com/spr/utils/core/UserContextProvider$UserContext getPartner ()Lcom/spr/beans/Partner;
+
+			com/spr/beans/Partner getPartnerId ()Ljava/lang/Long;
+
+		com/spr/paid/domain/adcollection/PaidInitiative setPartnerId (Ljava/lang/Long;)V
+
 		com/spr/utils/core/UserContextProvider getCurrentClientId ()Ljava/lang/Long;
 
 			com/spr/utils/core/UserContextProvider getCurrentClient ()Lcom/spr/beans/Client;
+
+				com/spr/utils/core/UserContextProvider$UserContext getClient ()Lcom/spr/beans/Client;
+
+			com/spr/beans/Client getClientId ()Ljava/lang/Long;
+
+		com/spr/paid/domain/adcollection/PaidInitiative setClientId (Ljava/lang/Long;)V
 
 		com/spr/utils/core/UserContextProvider getCurrentUserId ()Ljava/lang/Long;
 
 			com/spr/utils/core/UserContextProvider getCurrentUser ()Lcom/spr/beans/User;
 
+				com/spr/utils/core/UserContextProvider$UserContext getUser ()Lcom/spr/beans/User;
+
+			com/spr/beans/User getUserId ()Ljava/lang/Long;
+
+		com/spr/paid/domain/adcollection/PaidInitiative setUserId (Ljava/lang/Long;)V
+
+		com/spr/beans/universal/publishing/Post getPostId ()Ljava/lang/Long;
+
+		com/spr/paid/domain/QuickPublishAdConfig <init> (Ljava/lang/Long;Lcom/spr/paid/domain/adcollection/PaidInitiativePublishDTO;)V
+
+			com/spr/entities/LockingConfig <init> ()V
+
 		com/spr/utils/core/UserContextProvider getCurrentPartnerId ()Ljava/lang/Long;
 
 			com/spr/utils/core/UserContextProvider getCurrentPartner ()Lcom/spr/beans/Partner;
+
+				com/spr/utils/core/UserContextProvider$UserContext getPartner ()Lcom/spr/beans/Partner;
+
+			com/spr/beans/Partner getPartnerId ()Ljava/lang/Long;
+
+		com/spr/utils/core/managers/MongoTemplateFactory getPaidMongoTemplate (Ljava/lang/Long;)Lorg/springframework/data/mongodb/core/MongoTemplate;
 
 	com/spr/utils/core/ResponseGenerator generateResponseWithTimestampDates (Ljava/lang/Object;)Ljavax/ws/rs/core/Response;
 
@@ -151,6 +305,14 @@ com/spr/rest/PublishingRestAPI schedule (Ljavax/servlet/http/HttpServletRequest;
 			com/spr/utils/core/ResponseGenerator getGson (I)Lcom/google/gson/Gson;
 
 				com/spr/utils/core/ResponseGenerator getDefaultGsonBuilder ()Lcom/google/gson/GsonBuilder;
+
+					com/spr/utils/core/ResponseExclusionStrategy getInstance ()Lcom/spr/utils/core/ResponseExclusionStrategy;
+
+				com/spr/utils/core/ResponseGenerator$DateSerializer <init> (Lcom/spr/utils/core/ResponseGenerator$1;)V
+
+					com/spr/utils/core/ResponseGenerator$DateSerializer <init> ()V
+
+				com/spr/utils/core/ResponseGenerator$ReportingFieldSerializer <init> (I)V
 
 			com/spr/utils/core/ResponseGenerator getCacheControl ()Ljavax/ws/rs/core/CacheControl;
 

@@ -134,17 +134,13 @@ public class ParserAndAnalyserMain {
             MethodAnalyser methodAnalyser = new MethodAnalyser(elasticSearchService);
 
             PrintWriter methodSequenceCall = new PrintWriter(new File(methodName+"_Sequence.txt"));
-            PrintWriter methodSequenceCall2 = new PrintWriter(new File(methodName+"_Sequence2.txt"));
             List<String> sequenceOfMethodCalls = methodAnalyser.traceMethodCalls(className, methodName, methodParameters);
             for (String method : sequenceOfMethodCalls)
             {
-                methodSequenceCall2.println(method);
-                methodSequenceCall2.println();
                 methodSequenceCall.println(method);
                 methodSequenceCall.println();
             }
             methodSequenceCall.close();
-            methodSequenceCall2.close();
         } finally {
             elasticSearchService.closeConnection();
         }

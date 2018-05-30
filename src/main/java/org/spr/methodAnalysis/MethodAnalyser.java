@@ -40,25 +40,19 @@ public class MethodAnalyser {
 
         List<String> data = database.getAllInvokedMethods(className, methodName, methodParameters);
 
-        if (!data.isEmpty())
+        if (data!=null)
         {
-//            System.out.println(depth + className + " " + methodName + " " + methodParameters);
-//            try {
-//                Thread.sleep(100);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
             allInvokedMethods.add(depth + className + " " + methodName + " " + methodParameters);
-        }
-        Iterator<String> iterator = data.iterator();
+            Iterator<String> iterator = data.iterator();
 
-        while (iterator.hasNext()) {
-            String invokedMethod = iterator.next();
-            String methodDetails[] = invokedMethod.split(" ");
-            String invokedMethodClassName = methodDetails[0];
-            String invokedMethodName = methodDetails[1];
-            String invokedMethodParameters = methodDetails[2];
-            allInvokedMethods.addAll(traceMethodCalls(invokedMethodClassName, invokedMethodName, invokedMethodParameters, depth + "\t"));
+            while (iterator.hasNext()) {
+                String invokedMethod = iterator.next();
+                String methodDetails[] = invokedMethod.split(" ");
+                String invokedMethodClassName = methodDetails[0];
+                String invokedMethodName = methodDetails[1];
+                String invokedMethodParameters = methodDetails[2];
+                allInvokedMethods.addAll(traceMethodCalls(invokedMethodClassName, invokedMethodName, invokedMethodParameters, depth + "\t"));
+            }
         }
         return allInvokedMethods;
     }

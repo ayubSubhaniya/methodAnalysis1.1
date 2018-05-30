@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 
 public class ElasticSearchService implements DBService {
-    private static final int MAX_BUFFER_SIZE = (int) 1e5;
+    private static final int MAX_BUFFER_SIZE = (int) 1e3;
     private static final Logger LOGGER = Logger.getLogger(ElasticSearchService.class.getName());
     private RestHighLevelClient client;
     private String hostname = "localhost";
@@ -272,11 +272,11 @@ public class ElasticSearchService implements DBService {
         searchSourceBuilder.query(query);
         searchSourceBuilder.size(1);
         searchSourceBuilder.sort(new FieldSortBuilder(ParsedMethodFields.TIME_STAMP).order(SortOrder.DESC));
-
         searchRequest.source(searchSourceBuilder);
 
         try {
             SearchResponse response = client.search(searchRequest);
+
             SearchHit matchedResult = response.getHits().getHits()[0];
 
             JSONObject queryResult = new JSONObject(matchedResult.getSourceAsString());
@@ -295,7 +295,7 @@ public class ElasticSearchService implements DBService {
         } catch (ArrayIndexOutOfBoundsException exception) {
             LOGGER.error("No matches found", exception);
         }
-        return Collections.emptyList();
+        return null;
     }
 
     /**
@@ -312,6 +312,8 @@ public class ElasticSearchService implements DBService {
 
             BulkResponse response = client.bulk(bulkRequest);
 
+            //LOGGER.info(Runtime.getRuntime().freeMemory()/(1024.0*1024.0*1024.0));
+
             if (response.status() == RestStatus.OK) {
                 return true;
             } else {
@@ -320,7 +322,6 @@ public class ElasticSearchService implements DBService {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
-
         return false;
     }
 
