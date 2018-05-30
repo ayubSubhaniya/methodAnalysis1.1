@@ -15,4 +15,6 @@ public interface ParsedClassOutputter {
     String getSuperClassName(InputStream classInputStream) throws  IOException;
 
     JSONArray getImplementedInterfaces(InputStream classInputStream) throws IOException;
+
+    boolean isInterface(InputStream inputStream) throws IOException;
 }

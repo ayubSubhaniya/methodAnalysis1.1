@@ -6,5 +6,5 @@ public class a {
         E.takeItEasy();
     }
 }
-//analyseMethod ma doc org/spr/methodAnalysis/c check ()V
+//analyseMethod ma doc org/spr/methodAnalysis/h interfaceTest ()V
 //parseMethods ma doc /Users/smitpatel/IdeaProjects/methodAnalysis1.1/target/classes/org/spr/

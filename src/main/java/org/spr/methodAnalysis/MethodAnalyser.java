@@ -43,10 +43,12 @@ public class MethodAnalyser {
         if(data == null)
             data = getInvokedMethodsFromInhertedMethod(className,methodName,methodParameters);
 
-        if(data == null){
-            if(database.getNumberOfInterfaceImplementations(className) == 1) {
-                List<String> implementedClassNames = database.getImplementedClassesName(className);
-                data = database.getAllInvokedMethods(implementedClassNames.get(0),methodName,methodParameters);
+        if(database.isInterface(className)){
+            String interfaceName = className;
+            String concreteClass = getConcreteClassOfInterface(interfaceName);
+            if(concreteClass != null){
+                className = concreteClass;
+                data = database.getAllInvokedMethods(className,methodName,methodParameters);
             }
         }
 
@@ -68,6 +70,22 @@ public class MethodAnalyser {
         return allInvokedMethods;
     }
 
+    private String getConcreteClassOfInterface(String interfaceName){
+        List<String> implementedClasses = database.getImplementedClasses(interfaceName);
+        if(implementedClasses.size()==0){
+            List<String> extendedInterfaces = database.getInterfacesThatExtendInterface(interfaceName);
+            for(String childInterface : extendedInterfaces){
+                String concreteClass = getConcreteClassOfInterface(childInterface);
+                if(concreteClass != null)
+                    return concreteClass;
+            }
+        }
+        else
+            return implementedClasses.get(0);
+
+        return null;
+    }
+
     /**
      * Method checks if any parent class has the given method
      *
@@ -79,6 +97,8 @@ public class MethodAnalyser {
     private List<String> getInvokedMethodsFromInhertedMethod(String className, String methodName, String methodParameters){
         String parentClassName = database.getSuperClassName(className);
 
+        if(parentClassName == null)return null;
+
         List<String> allInvokedMethodsOfInheritedMethod = new ArrayList<>();
 
         while(!parentClassName.startsWith("java")){
@@ -89,7 +109,7 @@ public class MethodAnalyser {
                 parentClassName = database.getSuperClassName(parentClassName);
         }
 
-        return allInvokedMethodsOfInheritedMethod;
+        return null;
     }
 
 }

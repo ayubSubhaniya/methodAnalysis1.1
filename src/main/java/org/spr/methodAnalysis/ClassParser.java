@@ -1,8 +1,10 @@
 package org.spr.methodAnalysis;
 
+import jdk.internal.util.xml.impl.Input;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
@@ -154,10 +156,10 @@ public class ClassParser implements ParsedClassOutputter {
         return classNode.superName;
     }
 
-    public JSONArray getImplementedInterfaces(InputStream classInputStream) throws IOException {
+    public JSONArray getImplementedInterfaces(InputStream inputStream) throws IOException {
         JSONArray implementedInterfaces = new JSONArray();
 
-        ClassReader reader = new ClassReader(classInputStream);
+        ClassReader reader = new ClassReader(inputStream);
         ClassNode classNode = new ClassNode();
         reader.accept(classNode, 0);
 
@@ -165,6 +167,14 @@ public class ClassParser implements ParsedClassOutputter {
             implementedInterfaces.put(interfaceName);
 
         return implementedInterfaces;
+    }
+
+    public boolean isInterface(InputStream inputStream) throws IOException {
+        ClassReader reader = new ClassReader(inputStream);
+        ClassNode classNode = new ClassNode();
+        reader.accept(classNode, 0);
+
+        return (classNode.access & Opcodes.ACC_INTERFACE) != 0;
     }
 
 }

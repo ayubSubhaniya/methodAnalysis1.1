@@ -138,6 +138,11 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
         InputStream classInputStream = null;
         try {
             classInputStream = jarFile.getInputStream(classJarEntry);
+            if(parsedClassOutputter.isInterface(classInputStream))
+                return processInterfaceClassFileToJSON(jarFile,classJarEntry);
+            classInputStream.close();
+
+            classInputStream = jarFile.getInputStream(classJarEntry);
             List<JSONObject> parsedClassMethods = parsedClassOutputter.getParsedMethodsInJSON(classInputStream);
             classInputStream.close();
 
@@ -155,7 +160,7 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
             for (JSONObject parsedMethod : parsedClassMethods) {
                 parsedMethod.put(ParsedMethodFields.CLASS_NAME, className);
                 parsedMethod.put(ParsedMethodFields.SUPER_CLASS_NAME, superClassName);
-                parsedMethod.put(ParsedMethodFields.INTERFACE_NAMES, interfacesImplemented);
+                parsedMethod.put(ParsedMethodFields.IMPLEMENTED_INTERFACES, interfacesImplemented);
                 parsedMethod.put(ParsedMethodFields.JAR_NAME, jarName);
                 parsedMethod.put(ParsedMethodFields.TIME_STAMP, System.currentTimeMillis());
             }
@@ -167,6 +172,33 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
 
     }
 
+    public boolean processInterfaceClassFileToJSON(JarFile jarFile, JarEntry interfaceJarEntry) throws Exception {
+        InputStream interfaceInputStream = null;
+        try {
+            interfaceInputStream = jarFile.getInputStream(interfaceJarEntry);
+            List<JSONObject> parsedInterfaceMethods = parsedClassOutputter.getParsedMethodsInJSON(interfaceInputStream);
+            interfaceInputStream.close();
+
+            interfaceInputStream = jarFile.getInputStream(interfaceJarEntry);
+            JSONArray interfacesExtended = parsedClassOutputter.getImplementedInterfaces(interfaceInputStream);
+
+            String[] jarPath = jarFile.getName().split(File.separator);
+            String jarName = jarPath[jarPath.length - 1];
+            String interfaceName = interfaceJarEntry.getName().split("\\.")[0];
+
+            for (JSONObject parsedMethod : parsedInterfaceMethods) {
+                parsedMethod.put(ParsedMethodFields.INTERFACE_NAME, interfaceName);
+                parsedMethod.put(ParsedMethodFields.EXTENDED_INTERFACES, interfacesExtended);
+                parsedMethod.put(ParsedMethodFields.JAR_NAME, jarName);
+                parsedMethod.put(ParsedMethodFields.TIME_STAMP, System.currentTimeMillis());
+            }
+            return sendData(parsedInterfaceMethods);
+        } finally {
+            if (interfaceInputStream != null)
+                interfaceInputStream.close();
+        }
+    }
+
     /**
      * Method gets data from ClassParserAdapter and converts it to JSONObject to send
      *
@@ -176,6 +208,11 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
     public boolean processClassFileToJSON(String classPath) throws Exception {
         InputStream classInputStream = null;
         try {
+            classInputStream = new FileInputStream(classPath);
+            if(parsedClassOutputter.isInterface(classInputStream))
+                return processInterfaceClassFileToJSON(classPath);
+            classInputStream.close();
+
             classInputStream = new FileInputStream(classPath);
             List<JSONObject> parsedClassMethods = parsedClassOutputter.getParsedMethodsInJSON(classInputStream);
             classInputStream.close();
@@ -194,7 +231,7 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
             for (JSONObject parsedMethod : parsedClassMethods) {
                 parsedMethod.put(ParsedMethodFields.CLASS_NAME, relativeClassPath);
                 parsedMethod.put(ParsedMethodFields.SUPER_CLASS_NAME, superClassName);
-                parsedMethod.put(ParsedMethodFields.INTERFACE_NAMES, interfacesImplemented);
+                parsedMethod.put(ParsedMethodFields.IMPLEMENTED_INTERFACES, interfacesImplemented);
                 parsedMethod.put(ParsedMethodFields.TIME_STAMP, System.currentTimeMillis());
             }
             return sendData(parsedClassMethods);
@@ -204,4 +241,31 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
         }
 
     }
+
+    public boolean processInterfaceClassFileToJSON(String interfacePath) throws Exception {
+        InputStream interfaceInputStream = null;
+        try {
+            interfaceInputStream = new FileInputStream(interfacePath);
+            List<JSONObject> parsedInterfaceMethods = parsedClassOutputter.getParsedMethodsInJSON(interfaceInputStream);
+            interfaceInputStream.close();
+
+            interfaceInputStream = new FileInputStream(interfacePath);
+            String relativeInterfacePath = parsedClassOutputter.getRelativeClassPath(interfaceInputStream);
+            interfaceInputStream.close();
+
+            interfaceInputStream = new FileInputStream(interfacePath);
+            JSONArray interfacesImplemented = parsedClassOutputter.getImplementedInterfaces(interfaceInputStream);
+
+            for (JSONObject parsedMethod : parsedInterfaceMethods) {
+                parsedMethod.put(ParsedMethodFields.INTERFACE_NAME, relativeInterfacePath);
+                parsedMethod.put(ParsedMethodFields.EXTENDED_INTERFACES, interfacesImplemented);
+                parsedMethod.put(ParsedMethodFields.TIME_STAMP, System.currentTimeMillis());
+            }
+            return sendData(parsedInterfaceMethods);
+        } finally {
+            if (interfaceInputStream != null)
+                interfaceInputStream.close();
+        }
+    }
+
 }
