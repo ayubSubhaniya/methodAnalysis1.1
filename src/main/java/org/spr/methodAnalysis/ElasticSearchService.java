@@ -134,6 +134,12 @@ public class ElasticSearchService implements DBService {
                 .startObject(ParsedMethodFields.CLASS_NAME)
                 .field("type", "keyword")
                 .endObject()
+                .startObject(ParsedMethodFields.SUPER_CLASS_NAME)
+                .field("type", "keyword")
+                .endObject()
+                .startObject(ParsedMethodFields.INTERFACE_NAME)
+                .field("type", "keyword")
+                .endObject()
                 .startObject(ParsedMethodFields.METHOD_NAME)
                 .field("type", "keyword")
                 .endObject()
@@ -147,7 +153,13 @@ public class ElasticSearchService implements DBService {
                 .field("type", "long")
                 .endObject()
                 .startObject(ParsedMethodFields.INVOKED_METHODS)
-                .field("type", "text")
+                .field("type", "keyword")
+                .endObject()
+                .startObject(ParsedMethodFields.IMPLEMENTED_INTERFACES)
+                .field("type", "keyword")
+                .endObject()
+                .startObject(ParsedMethodFields.EXTENDED_INTERFACES)
+                .field("type", "keyword")
                 .endObject()
                 .endObject()
                 .endObject();
@@ -264,7 +276,6 @@ public class ElasticSearchService implements DBService {
         query.must(methodNameMatchQuery);
         query.must(methodParameterMatchQuery);
 
-        //LOGGER.info(query.toString());
 
         searchSourceBuilder.fetchSource(
                 new String[]{
@@ -283,7 +294,7 @@ public class ElasticSearchService implements DBService {
             JSONObject queryResult = new JSONObject(matchedResult.getSourceAsString());
             JSONArray invokedMethods = (JSONArray) queryResult.get(ParsedMethodFields.INVOKED_METHODS);
 
-            ArrayList<String> listOfInvokedMethods = new ArrayList<String>();
+            ArrayList<String> listOfInvokedMethods = new ArrayList<>();
             Iterator<Object> methodsIterator = invokedMethods.iterator();
 
             while (methodsIterator.hasNext()) {
@@ -299,23 +310,30 @@ public class ElasticSearchService implements DBService {
         return null;
     }
 
-    public List<String> getImplementedClassesName(String interfaceName) {
+
+
+    /**
+     * Get list of all classes that implemented a interface
+     *
+     * @param interfaceName
+     * @return list of strings of class names
+     */
+    public List<String> getImplementedClasses(String interfaceName) {
         SearchRequest searchRequest = new SearchRequest(indexname);
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        QueryBuilder interfaceNameMatchQuery = matchQuery(
-                ParsedMethodFields.INTERFACE_NAMES, interfaceName
+        QueryBuilder implementedInterfaceNameMatchQuery = matchQuery(
+                ParsedMethodFields.IMPLEMENTED_INTERFACES, interfaceName
         );
 
         BoolQueryBuilder query = QueryBuilders.boolQuery();
-        query.must(interfaceNameMatchQuery);
-        //LOGGER.info(query.toString());
+        query.must(implementedInterfaceNameMatchQuery);
 
-        String aggregationName = "group_by_"+ParsedMethodFields.CLASS_NAME;
+        String groupByAggregationName = "group_by_" + ParsedMethodFields.CLASS_NAME;
 
         searchSourceBuilder
-                .aggregation(AggregationBuilders.terms(aggregationName)
+                .aggregation(AggregationBuilders.terms(groupByAggregationName)
                         .field(ParsedMethodFields.CLASS_NAME)
                         .size(100)
                 );
@@ -325,15 +343,15 @@ public class ElasticSearchService implements DBService {
         searchRequest.source(searchSourceBuilder);
 
         try {
-            SearchResponse response = client.search(searchRequest);;
-            JSONObject aggregationResponse=new JSONObject(response.getAggregations().asMap());
-            JSONArray aggregationBuckets = aggregationResponse.getJSONObject(aggregationName).getJSONArray("buckets");
+            SearchResponse response = client.search(searchRequest);
 
-            ArrayList<String> listOfClasses = new ArrayList<String>();
+            JSONObject aggregationResponse = new JSONObject(response.getAggregations().asMap());
+            JSONArray aggregationBuckets = aggregationResponse.getJSONObject(groupByAggregationName).getJSONArray("buckets");
+
+            ArrayList<String> listOfClasses = new ArrayList<>();
             Iterator<Object> bucketsIterator = aggregationBuckets.iterator();
 
             while (bucketsIterator.hasNext()) {
-
                 JSONObject bucket = new JSONObject(bucketsIterator.next().toString());
                 listOfClasses.add((String) bucket.get("key"));
             }
@@ -346,14 +364,160 @@ public class ElasticSearchService implements DBService {
         return null;
     }
 
-    public int getNumberOfInterfaceImplementations(String interfaceName){
-        List<String> listOfClasses = getImplementedClassesName(interfaceName);
-        if (listOfClasses!=null)
+    /**
+     * Get list of all interfaces that extended a interface
+     *
+     * @param interfaceName
+     * @return list of strings of class names
+     */
+    public List<String> getInterfacesThatExtendInterface(String interfaceName) {
+        SearchRequest searchRequest = new SearchRequest(indexname);
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        QueryBuilder extendedInterfaceNameMatchQuery = matchQuery(
+                ParsedMethodFields.EXTENDED_INTERFACES, interfaceName
+        );
+
+        BoolQueryBuilder query = QueryBuilders.boolQuery();
+        query.must(extendedInterfaceNameMatchQuery);
+
+        String groupByAggregationName = "group_by_" + ParsedMethodFields.INTERFACE_NAME;
+
+        searchSourceBuilder
+                .aggregation(AggregationBuilders.terms(groupByAggregationName)
+                        .field(ParsedMethodFields.INTERFACE_NAME)
+                        .size(100)
+                );
+        searchSourceBuilder.query(query);
+        searchSourceBuilder.size(0);
+
+        searchRequest.source(searchSourceBuilder);
+
+        try {
+            SearchResponse response = client.search(searchRequest);
+
+            JSONObject aggregationResponse = new JSONObject(response.getAggregations().asMap());
+            JSONArray aggregationBuckets = aggregationResponse.getJSONObject(groupByAggregationName).getJSONArray("buckets");
+
+            ArrayList<String> listOfInterfaces = new ArrayList<>();
+            Iterator<Object> bucketsIterator = aggregationBuckets.iterator();
+
+            while (bucketsIterator.hasNext()) {
+
+                JSONObject bucket = new JSONObject(bucketsIterator.next().toString());
+                listOfInterfaces.add((String) bucket.get("key"));
+            }
+            return listOfInterfaces;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (ArrayIndexOutOfBoundsException exception) {
+            LOGGER.error("No matches found", exception);
+        }
+        return null;
+    }
+
+    /**
+     * Get list of all interfaces extended by a interface
+     *
+     * @param interfaceName
+     * @return list of strings of class names
+     */
+    public List<String> getExtendedInterfaces(String interfaceName) {
+        SearchRequest searchRequest = new SearchRequest(indexname);
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        QueryBuilder interfaceNameMatchQuery = matchQuery(
+                ParsedMethodFields.INTERFACE_NAME, interfaceName
+        );
+
+        BoolQueryBuilder query = QueryBuilders.boolQuery();
+        query.must(interfaceNameMatchQuery);
+
+        searchSourceBuilder.query(query);
+        searchSourceBuilder.size(1);
+
+        searchRequest.source(searchSourceBuilder);
+
+        try {
+            SearchResponse response = client.search(searchRequest);
+
+            SearchHit matchedResult = response.getHits().getHits()[0];
+
+            JSONObject queryResult = new JSONObject(matchedResult.getSourceAsString());
+            JSONArray extendedInterfaces = (JSONArray) queryResult.get(ParsedMethodFields.EXTENDED_INTERFACES);
+
+            ArrayList<String> listOfExtendedInterfaces = new ArrayList<String>();
+            Iterator<Object> interfaceIterator = extendedInterfaces.iterator();
+
+            while (interfaceIterator.hasNext()) {
+                listOfExtendedInterfaces.add((String) interfaceIterator.next());
+            }
+
+            return listOfExtendedInterfaces;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (ArrayIndexOutOfBoundsException exception) {
+            LOGGER.error("No matches found", exception);
+        }
+        return null;
+    }
+
+    /**
+     * Get count of classes that implemented a interface
+     *
+     * @param interfaceName
+     * @return
+     */
+    public int getNumberOfInterfaceImplementations(String interfaceName) {
+        List<String> listOfClasses = getImplementedClasses(interfaceName);
+        if (listOfClasses != null)
             return listOfClasses.size();
         else
             return -1;
     }
 
+    /**
+     * Check if there is any document of a interface
+     * @param interfaceName
+     * @return
+     */
+    public boolean isInterface(String interfaceName){
+        SearchRequest searchRequest = new SearchRequest(indexname);
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        QueryBuilder classNameMatchQuery = matchQuery(
+                ParsedMethodFields.INTERFACE_NAME, interfaceName
+        );
+
+        BoolQueryBuilder query = QueryBuilders.boolQuery();
+        query.must(classNameMatchQuery);
+
+        searchSourceBuilder.query(query);
+        searchSourceBuilder.size(1);
+
+        searchRequest.source(searchSourceBuilder);
+
+        try {
+            SearchResponse response = client.search(searchRequest);
+
+            boolean result = response.getHits().getHits().length>0;
+            return result;
+
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return false;
+    }
+
+    /**
+     * Get Super class name of a class
+     *
+     * @param className
+     * @return
+     */
     public String getSuperClassName(String className) {
         SearchRequest searchRequest = new SearchRequest(indexname);
 
@@ -365,7 +529,6 @@ public class ElasticSearchService implements DBService {
 
         BoolQueryBuilder query = QueryBuilders.boolQuery();
         query.must(classNameMatchQuery);
-        //LOGGER.info(query.toString());
 
         searchSourceBuilder
                 .fetchSource(new String[]{
@@ -409,8 +572,6 @@ public class ElasticSearchService implements DBService {
 
             BulkResponse response = client.bulk(bulkRequest);
 
-            //LOGGER.info(Runtime.getRuntime().freeMemory()/(1024.0*1024.0*1024.0));
-
             if (response.status() == RestStatus.OK) {
                 return true;
             } else {
@@ -423,7 +584,7 @@ public class ElasticSearchService implements DBService {
     }
 
     /**
-     * Check if index already exist in databaase
+     * Check if index already exist in database
      *
      * @param index name of index
      * @return boolean true if index exist else false

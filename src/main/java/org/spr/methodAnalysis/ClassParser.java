@@ -3,6 +3,7 @@ package org.spr.methodAnalysis;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
@@ -25,12 +26,12 @@ public class ClassParser implements ParsedClassOutputter {
      * Method parses the file in InputStream
      *
      * @param inputStream InputStream of the file to be parsed
-     * @return Map<String       ,       List   <   String> > Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
+     * @return Map<String                               ,                               List               <               String> > Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
      */
     public Map<String, List<String>> getMethodEntriesWithInvokedMethods(InputStream inputStream) throws IOException {
         ClassReader reader = new ClassReader(inputStream);
 
-        ClassNode classNode = new ClassNode();
+        ClassNode classNode = new ClassNode(Opcodes.ASM6);
         reader.accept(classNode, 0);
 
         final List<MethodNode> methods = classNode.methods;
@@ -143,7 +144,7 @@ public class ClassParser implements ParsedClassOutputter {
      * Method finds the super class name
      *
      * @param classInputStream InputStream of the class whose super class name is to be found
-     * @return  String super class name of the class whose InputStream is provided
+     * @return String super class name of the class whose InputStream is provided
      * @throws IOException
      */
     public String getSuperClassName(InputStream classInputStream) throws IOException {
@@ -154,17 +155,25 @@ public class ClassParser implements ParsedClassOutputter {
         return classNode.superName;
     }
 
-    public JSONArray getImplementedInterfaces(InputStream classInputStream) throws IOException {
+    public JSONArray getImplementedInterfaces(InputStream inputStream) throws IOException {
         JSONArray implementedInterfaces = new JSONArray();
 
-        ClassReader reader = new ClassReader(classInputStream);
+        ClassReader reader = new ClassReader(inputStream);
         ClassNode classNode = new ClassNode();
         reader.accept(classNode, 0);
 
-        for(String interfaceName : classNode.interfaces)
+        for (String interfaceName : classNode.interfaces)
             implementedInterfaces.put(interfaceName);
 
         return implementedInterfaces;
+    }
+
+    public boolean isInterface(InputStream inputStream) throws IOException {
+        ClassReader reader = new ClassReader(inputStream);
+        ClassNode classNode = new ClassNode();
+        reader.accept(classNode, 0);
+
+        return (classNode.access & Opcodes.ACC_INTERFACE) != 0;
     }
 
 }

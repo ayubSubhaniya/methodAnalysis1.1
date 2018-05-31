@@ -9,9 +9,15 @@ public interface DBService {
 
     List<String> getAllInvokedMethods(String className, String methodName, String methodParameters);
 
-    List<String> getImplementedClassesName(String interfaceName);
+    List<String> getImplementedClasses(String interfaceName);
+
+    List<String> getExtendedInterfaces(String interfaceName);
+
+    List<String> getInterfacesThatExtendInterface(String interfaceName);
 
     String getSuperClassName(String className);
 
     int getNumberOfInterfaceImplementations(String interfaceName);
+
+    boolean isInterface(String InterfaceName);
 }

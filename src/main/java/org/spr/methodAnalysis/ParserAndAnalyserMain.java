@@ -1,9 +1,10 @@
 package org.spr.methodAnalysis;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -133,13 +134,11 @@ public class ParserAndAnalyserMain {
 
             MethodAnalyser methodAnalyser = new MethodAnalyser(elasticSearchService);
 
-            PrintWriter methodSequenceCall = new PrintWriter(new File(methodName+"_Sequence.txt"));
-            List<String> sequenceOfMethodCalls = methodAnalyser.traceMethodCalls(className, methodName, methodParameters);
-            for (String method : sequenceOfMethodCalls)
-            {
-                methodSequenceCall.println(method);
-                methodSequenceCall.println();
-            }
+            PrintWriter methodSequenceCall = new PrintWriter(new File(methodName+"_Sequence_"+MethodAnalyser.MAX_LEVEL+".json"));
+            JSONObject sequenceOfMethodCalls = methodAnalyser.traceMethodCalls(className, methodName, methodParameters);
+            JSONArray sequenceOfMethodCallsArray = new JSONArray()
+                    .put(sequenceOfMethodCalls);
+            methodSequenceCall.println(sequenceOfMethodCallsArray.toString(2));
             methodSequenceCall.close();
         } finally {
             elasticSearchService.closeConnection();
