@@ -478,10 +478,11 @@ public class ElasticSearchService implements DBService {
 
     /**
      * Check if there is any document of a interface
+     *
      * @param interfaceName
      * @return
      */
-    public Boolean isInterface(String interfaceName){
+    public Boolean isInterface(String interfaceName) {
         SearchRequest searchRequest = new SearchRequest(indexname);
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -501,7 +502,7 @@ public class ElasticSearchService implements DBService {
         try {
             SearchResponse response = client.search(searchRequest);
 
-            boolean result = response.getHits().getHits().length>0;
+            boolean result = response.getHits().getHits().length > 0;
             return result;
 
         } catch (IOException e) {

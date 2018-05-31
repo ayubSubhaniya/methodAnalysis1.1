@@ -27,7 +27,7 @@ public class ClassParser implements ParsedClassOutputter {
      * Method parses the file in InputStream
      *
      * @param inputStream InputStream of the file to be parsed
-     * @return Map<String       ,       List   <   String> > Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
+     * @return Map<String                               ,                               List               <               String> > Name of method as Key and the invokedMethods by that method as List<String> as value in a Map
      */
     public Map<String, List<String>> getMethodEntriesWithInvokedMethods(InputStream inputStream) throws IOException {
         ClassReader reader = new ClassReader(inputStream);
@@ -145,7 +145,7 @@ public class ClassParser implements ParsedClassOutputter {
      * Method finds the super class name
      *
      * @param classInputStream InputStream of the class whose super class name is to be found
-     * @return  String super class name of the class whose InputStream is provided
+     * @return String super class name of the class whose InputStream is provided
      * @throws IOException
      */
     public String getSuperClassName(InputStream classInputStream) throws IOException {
@@ -163,7 +163,7 @@ public class ClassParser implements ParsedClassOutputter {
         ClassNode classNode = new ClassNode();
         reader.accept(classNode, 0);
 
-        for(String interfaceName : classNode.interfaces)
+        for (String interfaceName : classNode.interfaces)
             implementedInterfaces.put(interfaceName);
 
         return implementedInterfaces;

@@ -138,8 +138,8 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
         InputStream classInputStream = null;
         try {
             classInputStream = jarFile.getInputStream(classJarEntry);
-            if(parsedClassOutputter.isInterface(classInputStream))
-                return processInterfaceClassFileToJSON(jarFile,classJarEntry);
+            if (parsedClassOutputter.isInterface(classInputStream))
+                return processInterfaceClassFileToJSON(jarFile, classJarEntry);
             classInputStream.close();
 
             classInputStream = jarFile.getInputStream(classJarEntry);
@@ -209,7 +209,7 @@ public class SourceExplorer implements DataSender, ClassFileProcessable {
         InputStream classInputStream = null;
         try {
             classInputStream = new FileInputStream(classPath);
-            if(parsedClassOutputter.isInterface(classInputStream))
+            if (parsedClassOutputter.isInterface(classInputStream))
                 return processInterfaceClassFileToJSON(classPath);
             classInputStream.close();
 
